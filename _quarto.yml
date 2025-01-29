@@ -1,16 +1,16 @@
 project:
-  type: website
+  type: Learning everyday
   output-dir: docs
 
 website:
   title: "bloggy"
   navbar:
     right:
-      - about.qmd
+      - text Blog
+      - href: blog.qmd
       - icon: github
         href: https://github.com/
-      - icon: twitter
-        href: https://twitter.com
+
 format:
   html:
     theme: cosmo
