@@ -1,9 +1,9 @@
 project:
-  type: Learning everyday
+  type: website
   output-dir: docs
 
 website:
-  title: "bloggy"
+  title: "Learn Every Day"
   navbar:
     right:
       - text Blog
