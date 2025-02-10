@@ -8,13 +8,17 @@ website:
    right: 
       - text : Blog
         href: blog.qmd
+        icon: pen-fill
       - icon: github
         href: https://github.com/
 
+
+
 format:
   html:
-    theme: cosmo
-    css: styles.css
-
+    theme:
+      - assets/stylesheets/coeos.scss
+    code-block-bg: true
+    lang: en
 
 
