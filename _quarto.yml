@@ -5,9 +5,9 @@ project:
 website:
   title: "Learn Every Day"
   navbar:
-    right:
-      - text: Blog
-      - href: blog.qmd
+   right: 
+      - text : Blog
+        href: blog.qmd
       - icon: github
         href: https://github.com/
 
