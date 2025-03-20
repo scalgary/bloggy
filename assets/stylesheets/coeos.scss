@@ -621,6 +621,11 @@ div.quarto-about-solana .about-entity .about-links {
   color: $body-color;
 }
 
+.listing-title {
+  font-size: 25px; /* Remplace 20px par la taille que tu veux */
+  
+}
+
 div.quarto-post .listing-categories .listing-category {
   border: solid 1px $body-color;
 }
@@ -640,6 +645,7 @@ div.quarto-post .listing-categories .listing-category:hover {
 .quarto-listing-category .category:hover {
   color: $body-color;
   font-weight: bold;
+
 }
 
 .page-item.active .page-link,
@@ -689,4 +695,8 @@ nav p code:not(.sourceCode), nav li code:not(.sourceCode), nav td code:not(.sour
 #quarto-back-to-top {
   z-index: 100; /* Make sure it's above everything else */
   color: $body-color;
+}
+
+h2 {
+color:$blue
 }

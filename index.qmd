@@ -13,4 +13,5 @@ about:
 
 ---
 
-About this blog
+Hi! I'm Sandrine.  This is my **personal website**. Here you can find a lot of content about Machine Learning, R, Python, Git and GitHub and anytthing I'm interested in.  Feel free to explore my website and [get in touch](mailto: respectmyprivacy007@gmail.com) if you have any suggestion! 
+

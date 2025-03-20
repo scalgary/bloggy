@@ -4,7 +4,7 @@
     "href": "blog.html",
     "title": "Learn Every Day",
     "section": "",
-    "text": "How to add a new Post\n\n\n\n\n\n\nmanual\n\n\n\n\n\n\n\n\n\nFeb 10, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nPost With Code\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\nJan 28, 2025\n\n\nHarlow Malloc\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nJan 25, 2025\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+    "text": "Setting Up a GitHub Repository with Docker and GitHub Actions\n\n\n\n\n\n\nGit\n\n\nDocker\n\n\n\n\n\n\n\n\n\nMar 18, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nHow to add a new Post\n\n\n\n\n\n\nmanual\n\n\n\n\n\n\n\n\n\nFeb 10, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nJan 25, 2025\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/welcome/index.html",
@@ -16,16 +16,16 @@
   {
     "objectID": "posts/post-with-code/index.html",
     "href": "posts/post-with-code/index.html",
-    "title": "Post With Code",
+    "title": "Setting Up a GitHub Repository with Docker and GitHub Actions",
     "section": "",
-    "text": "This is a post with executable code.\n\nprint(\"hh\")"
+    "text": "Quick manual on how to use Github actions to build a docker image"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "About",
     "section": "",
-    "text": "About this blog"
+    "text": "Hi! I’m Sandrine. This is my personal website. Here you can find a lot of content about Machine Learning, R, Python, Git and GitHub and anytthing I’m interested in. Feel free to explore my website and get in touch if you have any suggestion!"
   },
   {
     "objectID": "posts/new_post/index.html",
@@ -33,5 +33,47 @@
     "title": "How to add a new Post",
     "section": "",
     "text": "It is very easy.\n\nCreate a sub-directory within posts and add an index.qmd file in this directory\n\nThat qmd file is the new blog post and when you render that, the blog home page will automatically update to include the newest post at the top of the listing.\nThen just do quarto preview."
+  },
+  {
+    "objectID": "posts/post-with-code/index.html#example-files",
+    "href": "posts/post-with-code/index.html#example-files",
+    "title": "Setting Up a GitHub Repository with Docker and GitHub Actions",
+    "section": "Example Files",
+    "text": "Example Files\n\napp.py\nprint(\"Hello Test!\")\n\n\nrequirements.txt\n# This file can be left empty or include dependencies\n\n\n.gitignore\n# This file can be left empty or include dependencies"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html#dockerfile",
+    "href": "posts/post-with-code/index.html#dockerfile",
+    "title": "Setting Up a GitHub Repository with Docker and GitHub Actions",
+    "section": "Dockerfile",
+    "text": "Dockerfile\n# Use an official Python image as the base\nFROM python:3.11\n\n# Set the working directory in the container\nWORKDIR /app\n\n# Copy project files into the container\nCOPY . /app/\n\n# Create a virtual environment in /app/venv\nRUN python -m venv venv\n\n# Activate the virtual environment and install dependencies\nRUN /app/venv/bin/pip install --upgrade pip && \\\n    /app/venv/bin/pip install --no-cache-dir -r requirements.txt\n\n# Run the application using the virtual environment\nCMD [\"/app/venv/bin/python\", \"app.py\"]"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html#github-actions-workflow-docker-build.yml",
+    "href": "posts/post-with-code/index.html#github-actions-workflow-docker-build.yml",
+    "title": "Setting Up a GitHub Repository with Docker and GitHub Actions",
+    "section": "GitHub Actions Workflow (docker-build.yml)",
+    "text": "GitHub Actions Workflow (docker-build.yml)\nname: Build and Push Docker Image\n\non:\n  push:\n    branches:\n      - main  # Change this if using a different branch\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n\n    steps:\n      - name: Checkout Repository\n        uses: actions/checkout@v3\n\n      - name: Set up Docker Buildx\n        uses: docker/setup-buildx-action@v2\n\n      - name: Log in to DockerHub\n        uses: docker/login-action@v2\n        with:\n          username: ${{ secrets.DOCKER_USERNAME }}\n          password: ${{ secrets.DOCKER_PASSWORD }}\n\n      - name: Build and Push Docker Image\n        uses: docker/build-push-action@v4\n        with:\n          context: .\n          file: ./Dockerfile\n          push: true\n          platforms: linux/amd64,linux/arm64\n          tags: ${{ secrets.DOCKER_USERNAME }}/docker_test:latest"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html#storing-docker-hub-credentials-in-github-secrets",
+    "href": "posts/post-with-code/index.html#storing-docker-hub-credentials-in-github-secrets",
+    "title": "Setting Up a GitHub Repository with Docker and GitHub Actions",
+    "section": "Storing Docker Hub Credentials in GitHub Secrets",
+    "text": "Storing Docker Hub Credentials in GitHub Secrets\nSince a free DockerHub account allows only one private repository, credentials must be stored securely in GitHub:\n\nGo to GitHub &gt; Your Repository &gt; Settings &gt; Secrets and variables &gt; Actions.\nClick New repository secret and add:\n\nDOCKER_USERNAME = Your DockerHub username.\nDOCKER_PASSWORD = Your DockerHub password."
+  },
+  {
+    "objectID": "posts/post-with-code/index.html#verifying-the-setup",
+    "href": "posts/post-with-code/index.html#verifying-the-setup",
+    "title": "Setting Up a GitHub Repository with Docker and GitHub Actions",
+    "section": "Verifying the Setup",
+    "text": "Verifying the Setup\nAfter pushing changes to the repository, GitHub will automatically build and push the Docker image to DockerHub. You can verify the process:\n\nOn DockerHub: Check that the image was successfully pushed.\nOn GitHub: Inspect the logs in GitHub Actions to confirm the build and push process was completed successfully."
+  },
+  {
+    "objectID": "posts/post-with-code/index.html#setting-up-a-git-repository",
+    "href": "posts/post-with-code/index.html#setting-up-a-git-repository",
+    "title": "Setting Up a GitHub Repository with Docker and GitHub Actions",
+    "section": "Setting Up a Git Repository",
+    "text": "Setting Up a Git Repository\nTo set up a Git repository and integrate it with Docker and GitHub Actions:\n\nCreate a new repository on GitHub.\nClone the repository to your local machine.\nEnsure the following minimum required files are included in the repository:\n\n.github/workflows/docker-build.yml: Defines the GitHub Actions workflow for building and pushing the Docker image.\nDockerfile: Contains the instructions to build the Docker image.\napp.py: A simple Python script (e.g., print(\"Hello Test!\")).\nrequirements.txt: Can be empty or contain dependencies.\n.gitignore: Can be empty but is useful for ignoring unnecessary files.\n\n\n\nExample Files\n\napp.py\nprint(\"Hello Test!\")\n\n\nrequirements.txt\n# This file can be left empty or include dependencies\n\n\n.gitignore\n# This file can be left empty or include dependencies\n\n\n\nDockerfile\n# Use an official Python image as the base\nFROM python:3.11\n\n# Set the working directory in the container\nWORKDIR /app\n\n# Copy project files into the container\nCOPY . /app/\n\n# Create a virtual environment in /app/venv\nRUN python -m venv venv\n\n# Activate the virtual environment and install dependencies\nRUN /app/venv/bin/pip install --upgrade pip && \\\n    /app/venv/bin/pip install --no-cache-dir -r requirements.txt\n\n# Run the application using the virtual environment\nCMD [\"/app/venv/bin/python\", \"app.py\"]\n\n\nGitHub Actions Workflow (docker-build.yml)\nname: Build and Push Docker Image\n\non:\n  push:\n    branches:\n      - main  # Change this if using a different branch\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n\n    steps:\n      - name: Checkout Repository\n        uses: actions/checkout@v3\n\n      - name: Set up Docker Buildx\n        uses: docker/setup-buildx-action@v2\n\n      - name: Log in to DockerHub\n        uses: docker/login-action@v2\n        with:\n          username: ${{ secrets.DOCKER_USERNAME }}\n          password: ${{ secrets.DOCKER_PASSWORD }}\n\n      - name: Build and Push Docker Image\n        uses: docker/build-push-action@v4\n        with:\n          context: .\n          file: ./Dockerfile\n          push: true\n          platforms: linux/amd64,linux/arm64\n          tags: ${{ secrets.DOCKER_USERNAME }}/docker_test:latest\n\n\nStoring Docker Hub Credentials in GitHub Secrets\nSince a free DockerHub account allows only one private repository, credentials must be stored securely in GitHub:\n\nGo to GitHub &gt; Your Repository &gt; Settings &gt; Secrets and variables &gt; Actions.\nClick New repository secret and add:\n\nDOCKER_USERNAME = Your DockerHub username.\nDOCKER_PASSWORD = Your DockerHub password.\n\n\n\n\nVerifying the Setup\nAfter pushing changes to the repository, GitHub will automatically build and push the Docker image to DockerHub. You can verify the process:\n\nOn DockerHub: Check that the image was successfully pushed.\nOn GitHub: Inspect the logs in GitHub Actions to confirm the build and push process was completed successfully."
   }
 ]
