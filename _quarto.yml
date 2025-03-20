@@ -9,6 +9,8 @@ website:
       - text : Blog
         href: blog.qmd
         icon: pen-fill
+      - text : Sandrine
+        href: About.qmd
       - icon: github
         href: https://github.com/
 

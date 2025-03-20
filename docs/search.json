@@ -23,7 +23,7 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "About",
+    "title": "Title",
     "section": "",
     "text": "Hi! I’m Sandrine. This is my personal website. Here you can find a lot of content about Machine Learning, R, Python, Git and GitHub and anytthing I’m interested in. Feel free to explore my website and get in touch if you have any suggestion!"
   },
@@ -117,5 +117,12 @@
     "title": "How to use Github actions to build a docker image",
     "section": "Creating some files",
     "text": "Creating some files\n\napp.py\n\nprint(\"Hello Test!\")\n\nrequirements.txt\n\n# This file can be left empty or include dependencies\n\n.gitignore\n\n# This file can be left empty or include dependencies\n\nDockerfile\n\n# Use an official Python image as the base\nFROM python:3.11\n\n# Set the working directory in the container\nWORKDIR /app\n\n# Copy project files into the container\nCOPY . /app/\n\n# Create a virtual environment in /app/venv\nRUN python -m venv venv\n\n# Activate the virtual environment and install dependencies\nRUN /app/venv/bin/pip install --upgrade pip && \\\n    /app/venv/bin/pip install --no-cache-dir -r requirements.txt\n\n# Run the application using the virtual environment\nCMD [\"/app/venv/bin/python\", \"app.py\"]\n\ndocker-build.yml\n\nname: Build and Push Docker Image\n\non:\n  push:\n    branches:\n      - main  # Change this if using a different branch\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n\n    steps:\n      - name: Checkout Repository\n        uses: actions/checkout@v3\n\n      - name: Set up Docker Buildx\n        uses: docker/setup-buildx-action@v2\n\n      - name: Log in to DockerHub\n        uses: docker/login-action@v2\n        with:\n          username: ${{ secrets.DOCKER_USERNAME }}\n          password: ${{ secrets.DOCKER_PASSWORD }}\n\n      - name: Build and Push Docker Image\n        uses: docker/build-push-action@v4\n        with:\n          context: .\n          file: ./Dockerfile\n          push: true\n          platforms: linux/amd64,linux/arm64\n          tags: ${{ secrets.DOCKER_USERNAME }}/docker_test:latest\nNote: I set up platforms as I will use the image on a Mac. ## Storing Docker Hub Credentials in GitHub Secrets\nCredentials must be stored securely in GitHub:\n\nGo to GitHub &gt; Your Repository &gt; Settings &gt; Secrets and variables &gt; Actions.\nClick New repository secret and add:\n\nDOCKER_USERNAME = Your DockerHub username.\nDOCKER_PASSWORD = Your DockerHub password.\n\n\nA free DockerHub account allows only one private repository."
+  },
+  {
+    "objectID": "About.html",
+    "href": "About.html",
+    "title": "About",
+    "section": "",
+    "text": "Hi! I’m Sandrine. This is my personal website. Here you can find a lot of content about Machine Learning, R, Python, Git and GitHub and anything I’m interested in. Feel free to explore my website and get in touch if you have any suggestion!"
   }
 ]

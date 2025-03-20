@@ -723,3 +723,17 @@ nav p code:not(.sourceCode), nav li code:not(.sourceCode), nav td code:not(.sour
 h2#toc-title {
   color:$blue;
 }
+
+.sandrine{
+  color:$body-color;
+}
+.sandrine strong  {
+  color:$blue;
+}
+.sandrine a  {
+  color:$pink;
+}
+
+.sandrine a:hover  {
+  color:$gray-600;
+}
