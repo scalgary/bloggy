@@ -1,0 +1,121 @@
+---
+title: "Setting Up a GitHub Repository with Docker and GitHub Actions"
+date: "2025-03-18"
+categories: [Git,Docker]
+image: "image.jpg"
+---
+
+Quick manual on how to use Github actions to build a docker image
+
+## Setting Up a Git Repository
+
+To set up a Git repository and integrate it with Docker and GitHub Actions:
+
+1. Create a new repository on GitHub.
+2. Clone the repository to your local machine.
+3. Ensure the following minimum required files are included in the repository:
+   
+   - `.github/workflows/docker-build.yml`: Defines the GitHub Actions workflow for building and pushing the Docker image.
+   - `Dockerfile`: Contains the instructions to build the Docker image.
+   - `app.py`: A simple Python script (e.g., `print("Hello Test!")`).
+   - `requirements.txt`: Can be empty or contain dependencies.
+   - `.gitignore`: Can be empty but is useful for ignoring unnecessary files.
+
+### Example Files
+
+##### `app.py`
+
+```python
+print("Hello Test!")
+```
+
+##### `requirements.txt`
+
+```python
+# This file can be left empty or include dependencies
+```
+
+##### `.gitignore`
+
+
+```python
+# This file can be left empty or include dependencies
+```
+
+
+##### `Dockerfile`
+
+```dockerfile
+# Use an official Python image as the base
+FROM python:3.11
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy project files into the container
+COPY . /app/
+
+# Create a virtual environment in /app/venv
+RUN python -m venv venv
+
+# Activate the virtual environment and install dependencies
+RUN /app/venv/bin/pip install --upgrade pip && \
+    /app/venv/bin/pip install --no-cache-dir -r requirements.txt
+
+# Run the application using the virtual environment
+CMD ["/app/venv/bin/python", "app.py"]
+```
+
+##### `docker-build.yml`
+
+```yaml
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main  # Change this if using a different branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ secrets.DOCKER_USERNAME }}/docker_test:latest
+```
+
+## Storing Docker Hub Credentials in GitHub Secrets
+
+Since a free DockerHub account allows only one private repository, credentials must be stored securely in GitHub:
+
+1. Go to **GitHub > Your Repository > Settings > Secrets and variables > Actions**.
+2. Click **New repository secret** and add:
+   - `DOCKER_USERNAME` = Your DockerHub username.
+   - `DOCKER_PASSWORD` = Your DockerHub password.
+
+## Verifying the Setup
+
+After pushing changes to the repository, GitHub will automatically build and push the Docker image to DockerHub. You can verify the process:
+
+- **On DockerHub**: Check that the image was successfully pushed.
+- **On GitHub**: Inspect the logs in **GitHub Actions** to confirm the build and push process was completed successfully.
+
