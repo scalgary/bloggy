@@ -638,6 +638,9 @@ div.quarto-post .listing-categories .listing-category:hover {
   color: $body-color;
 }
 
+div.quarto-post .listing-description a{
+  color: $blue;
+}
 .quarto-listing-category .category {
   text-transform: uppercase;
 }
@@ -697,6 +700,26 @@ nav p code:not(.sourceCode), nav li code:not(.sourceCode), nav td code:not(.sour
   color: $body-color;
 }
 
-h2 {
-color:$blue
+
+
+.content >p {
+  color:lightcoral;
+  margin-bottom: 0.5rem;
+
+}
+
+.content section h2{
+
+  font-size: 2rem;
+  margin-top: auto;
+  margin-bottom: 0.5rem;
+  color:$blue;
+}
+.content ol,
+.content li >p{
+    margin-bottom: 0;
+}
+
+h2#toc-title {
+  color:$blue;
 }

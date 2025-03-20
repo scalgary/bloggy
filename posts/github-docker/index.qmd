@@ -1,15 +1,15 @@
 ---
-title: "Setting Up a GitHub Repository with Docker and GitHub Actions"
+title: "How to use Github actions to build a docker image"
 date: "2025-03-18"
 categories: [Git,Docker]
 image: "image.jpg"
+toc: true
 ---
 
-Quick manual on how to use Github actions to build a docker image
+Setting Up a GitHub Repository with Docker and GitHub Actions
 
 ## Setting Up a Git Repository
 
-To set up a Git repository and integrate it with Docker and GitHub Actions:
 
 1. Create a new repository on GitHub.
 2. Clone the repository to your local machine.
@@ -21,21 +21,21 @@ To set up a Git repository and integrate it with Docker and GitHub Actions:
    - `requirements.txt`: Can be empty or contain dependencies.
    - `.gitignore`: Can be empty but is useful for ignoring unnecessary files.
 
-### Example Files
+## Creating some files
 
-##### `app.py`
+ - `app.py`
 
 ```python
 print("Hello Test!")
 ```
 
-##### `requirements.txt`
+- `requirements.txt`
 
 ```python
 # This file can be left empty or include dependencies
 ```
 
-##### `.gitignore`
+- `.gitignore`
 
 
 ```python
@@ -43,7 +43,7 @@ print("Hello Test!")
 ```
 
 
-##### `Dockerfile`
+- `Dockerfile`
 
 ```dockerfile
 # Use an official Python image as the base
@@ -66,7 +66,7 @@ RUN /app/venv/bin/pip install --upgrade pip && \
 CMD ["/app/venv/bin/python", "app.py"]
 ```
 
-##### `docker-build.yml`
+- `docker-build.yml`
 
 ```yaml
 name: Build and Push Docker Image
@@ -102,15 +102,17 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ secrets.DOCKER_USERNAME }}/docker_test:latest
 ```
-
+Note: I set up platforms as I will use the image on a Mac.
 ## Storing Docker Hub Credentials in GitHub Secrets
 
-Since a free DockerHub account allows only one private repository, credentials must be stored securely in GitHub:
+ Credentials must be stored securely in GitHub:
 
 1. Go to **GitHub > Your Repository > Settings > Secrets and variables > Actions**.
 2. Click **New repository secret** and add:
    - `DOCKER_USERNAME` = Your DockerHub username.
    - `DOCKER_PASSWORD` = Your DockerHub password.
+
+A free DockerHub account allows only one private repository.
 
 ## Verifying the Setup
 

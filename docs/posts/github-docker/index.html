@@ -8,7 +8,7 @@
 
 <meta name="dcterms.date" content="2025-03-18">
 
-<title>Learn Every Day - Setting Up a GitHub Repository with Docker and GitHub Actions</title>
+<title>Learn Every Day - How to use Github actions to build a docker image</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -105,7 +105,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -143,13 +143,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#setting-up-a-git-repository" id="toc-setting-up-a-git-repository" class="nav-link active" data-scroll-target="#setting-up-a-git-repository">Setting Up a Git Repository</a></li>
+  <li><a href="#creating-some-files" id="toc-creating-some-files" class="nav-link" data-scroll-target="#creating-some-files">Creating some files</a></li>
+  <li><a href="#verifying-the-setup" id="toc-verifying-the-setup" class="nav-link" data-scroll-target="#verifying-the-setup">Verifying the Setup</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Setting Up a GitHub Repository with Docker and GitHub Actions</h1>
+<h1 class="title">How to use Github actions to build a docker image</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Git</div>
     <div class="quarto-category">Docker</div>
@@ -176,10 +186,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Quick manual on how to use Github actions to build a docker image</p>
+<p>Setting Up a GitHub Repository with Docker and GitHub Actions</p>
 <section id="setting-up-a-git-repository" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-a-git-repository">Setting Up a Git Repository</h2>
-<p>To set up a Git repository and integrate it with Docker and GitHub Actions:</p>
 <ol type="1">
 <li><p>Create a new repository on GitHub.</p></li>
 <li><p>Clone the repository to your local machine.</p></li>
@@ -192,22 +201,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>.gitignore</code>: Can be empty but is useful for ignoring unnecessary files.</li>
 </ul></li>
 </ol>
-<section id="example-files" class="level3">
-<h3 class="anchored" data-anchor-id="example-files">Example Files</h3>
-<section id="app.py" class="level5">
-<h5 class="anchored" data-anchor-id="app.py"><code>app.py</code></h5>
+</section>
+<section id="creating-some-files" class="level2">
+<h2 class="anchored" data-anchor-id="creating-some-files">Creating some files</h2>
+<ul>
+<li><code>app.py</code></li>
+</ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Hello Test!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="requirements.txt" class="level5">
-<h5 class="anchored" data-anchor-id="requirements.txt"><code>requirements.txt</code></h5>
+<ul>
+<li><code>requirements.txt</code></li>
+</ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This file can be left empty or include dependencies</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="gitignore" class="level5">
-<h5 class="anchored" data-anchor-id="gitignore"><code>.gitignore</code></h5>
+<ul>
+<li><code>.gitignore</code></li>
+</ul>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This file can be left empty or include dependencies</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="dockerfile" class="level5">
-<h5 class="anchored" data-anchor-id="dockerfile"><code>Dockerfile</code></h5>
+<ul>
+<li><code>Dockerfile</code></li>
+</ul>
 <div class="sourceCode" id="cb4"><pre class="sourceCode dockerfile code-with-copy"><code class="sourceCode dockerfile"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use an official Python image as the base</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.11</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -226,9 +237,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the application using the virtual environment</span></span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">"/app/venv/bin/python"</span>, <span class="st">"app.py"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="docker-build.yml" class="level5">
-<h5 class="anchored" data-anchor-id="docker-build.yml"><code>docker-build.yml</code></h5>
+<ul>
+<li><code>docker-build.yml</code></li>
+</ul>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build and Push Docker Image</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
@@ -261,12 +272,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">push</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">platforms</span><span class="kw">:</span><span class="at"> linux/amd64,linux/arm64</span></span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">tags</span><span class="kw">:</span><span class="at"> ${{ secrets.DOCKER_USERNAME }}/docker_test:latest</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-</section>
-</section>
-<section id="storing-docker-hub-credentials-in-github-secrets" class="level2">
-<h2 class="anchored" data-anchor-id="storing-docker-hub-credentials-in-github-secrets">Storing Docker Hub Credentials in GitHub Secrets</h2>
-<p>Since a free DockerHub account allows only one private repository, credentials must be stored securely in GitHub:</p>
+<p>Note: I set up platforms as I will use the image on a Mac. ## Storing Docker Hub Credentials in GitHub Secrets</p>
+<p>Credentials must be stored securely in GitHub:</p>
 <ol type="1">
 <li>Go to <strong>GitHub &gt; Your Repository &gt; Settings &gt; Secrets and variables &gt; Actions</strong>.</li>
 <li>Click <strong>New repository secret</strong> and add:
@@ -275,6 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>DOCKER_PASSWORD</code> = Your DockerHub password.</li>
 </ul></li>
 </ol>
+<p>A free DockerHub account allows only one private repository.</p>
 </section>
 <section id="verifying-the-setup" class="level2">
 <h2 class="anchored" data-anchor-id="verifying-the-setup">Verifying the Setup</h2>
