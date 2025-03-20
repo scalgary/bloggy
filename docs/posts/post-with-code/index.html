@@ -194,21 +194,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <section id="example-files" class="level3">
 <h3 class="anchored" data-anchor-id="example-files">Example Files</h3>
-<section id="app.py" class="level4">
-<h4 class="anchored" data-anchor-id="app.py"><code>app.py</code></h4>
+<section id="app.py" class="level5">
+<h5 class="anchored" data-anchor-id="app.py"><code>app.py</code></h5>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Hello Test!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="requirements.txt" class="level4">
-<h4 class="anchored" data-anchor-id="requirements.txt"><code>requirements.txt</code></h4>
+<section id="requirements.txt" class="level5">
+<h5 class="anchored" data-anchor-id="requirements.txt"><code>requirements.txt</code></h5>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This file can be left empty or include dependencies</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="gitignore" class="level4">
-<h4 class="anchored" data-anchor-id="gitignore"><code>.gitignore</code></h4>
+<section id="gitignore" class="level5">
+<h5 class="anchored" data-anchor-id="gitignore"><code>.gitignore</code></h5>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This file can be left empty or include dependencies</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-</section>
-<section id="dockerfile" class="level3">
-<h3 class="anchored" data-anchor-id="dockerfile">Dockerfile</h3>
+<section id="dockerfile" class="level5">
+<h5 class="anchored" data-anchor-id="dockerfile"><code>Dockerfile</code></h5>
 <div class="sourceCode" id="cb4"><pre class="sourceCode dockerfile code-with-copy"><code class="sourceCode dockerfile"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use an official Python image as the base</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> python:3.11</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -228,8 +227,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the application using the virtual environment</span></span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="kw">CMD</span> [<span class="st">"/app/venv/bin/python"</span>, <span class="st">"app.py"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="github-actions-workflow-docker-build.yml" class="level3">
-<h3 class="anchored" data-anchor-id="github-actions-workflow-docker-build.yml">GitHub Actions Workflow (<code>docker-build.yml</code>)</h3>
+<section id="docker-build.yml" class="level5">
+<h5 class="anchored" data-anchor-id="docker-build.yml"><code>docker-build.yml</code></h5>
 <div class="sourceCode" id="cb5"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Build and Push Docker Image</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
@@ -263,8 +262,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">platforms</span><span class="kw">:</span><span class="at"> linux/amd64,linux/arm64</span></span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">tags</span><span class="kw">:</span><span class="at"> ${{ secrets.DOCKER_USERNAME }}/docker_test:latest</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="storing-docker-hub-credentials-in-github-secrets" class="level3">
-<h3 class="anchored" data-anchor-id="storing-docker-hub-credentials-in-github-secrets">Storing Docker Hub Credentials in GitHub Secrets</h3>
+</section>
+</section>
+<section id="storing-docker-hub-credentials-in-github-secrets" class="level2">
+<h2 class="anchored" data-anchor-id="storing-docker-hub-credentials-in-github-secrets">Storing Docker Hub Credentials in GitHub Secrets</h2>
 <p>Since a free DockerHub account allows only one private repository, credentials must be stored securely in GitHub:</p>
 <ol type="1">
 <li>Go to <strong>GitHub &gt; Your Repository &gt; Settings &gt; Secrets and variables &gt; Actions</strong>.</li>
@@ -275,8 +276,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 </ol>
 </section>
-<section id="verifying-the-setup" class="level3">
-<h3 class="anchored" data-anchor-id="verifying-the-setup">Verifying the Setup</h3>
+<section id="verifying-the-setup" class="level2">
+<h2 class="anchored" data-anchor-id="verifying-the-setup">Verifying the Setup</h2>
 <p>After pushing changes to the repository, GitHub will automatically build and push the Docker image to DockerHub. You can verify the process:</p>
 <ul>
 <li><strong>On DockerHub</strong>: Check that the image was successfully pushed.</li>
@@ -284,7 +285,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

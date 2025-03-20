@@ -23,19 +23,19 @@ To set up a Git repository and integrate it with Docker and GitHub Actions:
 
 ### Example Files
 
-#### `app.py`
+##### `app.py`
 
 ```python
 print("Hello Test!")
 ```
 
-#### `requirements.txt`
+##### `requirements.txt`
 
 ```python
 # This file can be left empty or include dependencies
 ```
 
-#### `.gitignore`
+##### `.gitignore`
 
 
 ```python
@@ -43,7 +43,7 @@ print("Hello Test!")
 ```
 
 
-### Dockerfile
+##### `Dockerfile`
 
 ```dockerfile
 # Use an official Python image as the base
@@ -66,7 +66,7 @@ RUN /app/venv/bin/pip install --upgrade pip && \
 CMD ["/app/venv/bin/python", "app.py"]
 ```
 
-### GitHub Actions Workflow (`docker-build.yml`)
+##### `docker-build.yml`
 
 ```yaml
 name: Build and Push Docker Image
@@ -103,7 +103,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/docker_test:latest
 ```
 
-### Storing Docker Hub Credentials in GitHub Secrets
+## Storing Docker Hub Credentials in GitHub Secrets
 
 Since a free DockerHub account allows only one private repository, credentials must be stored securely in GitHub:
 
@@ -112,7 +112,7 @@ Since a free DockerHub account allows only one private repository, credentials m
    - `DOCKER_USERNAME` = Your DockerHub username.
    - `DOCKER_PASSWORD` = Your DockerHub password.
 
-### Verifying the Setup
+## Verifying the Setup
 
 After pushing changes to the repository, GitHub will automatically build and push the Docker image to DockerHub. You can verify the process:
 
