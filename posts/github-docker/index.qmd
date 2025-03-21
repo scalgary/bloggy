@@ -103,6 +103,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/docker_test:latest
 ```
 Note: I set up platforms as I will use the image on a Mac.
+
 ## Storing Docker Hub Credentials in GitHub Secrets
 
  Credentials must be stored securely in GitHub:

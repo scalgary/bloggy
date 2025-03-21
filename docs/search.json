@@ -4,14 +4,14 @@
     "href": "blog.html",
     "title": "Learn Every Day",
     "section": "",
-    "text": "How to use Github actions to build a docker image\n\n\n\n\n\n\nGit\n\n\nDocker\n\n\n\n\n\n\n\n\n\nMar 18, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nHow to add a new Post\n\n\n\n\n\n\nmanual\n\n\n\n\n\n\n\n\n\nFeb 10, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nJan 25, 2025\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+    "text": "Welcome To My Blog\n\n\n\n\n\n\nmanual\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHow to use Github actions to build a docker image\n\n\n\n\n\n\nGit\n\n\nDocker\n\n\n\n\n\n\n\n\n\nMar 18, 2025\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/welcome/index.html",
     "href": "posts/welcome/index.html",
     "title": "Welcome To My Blog",
     "section": "",
-    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts.\n\ntest1\ndkfdskhfjdskhfd\n\n\ntest2"
+    "text": "Using the Welcome Post as my own manual for managing this blog. Welcome!\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
   },
   {
     "objectID": "posts/post-with-code/index.html",
@@ -23,9 +23,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Title",
+    "title": "Bonjour",
     "section": "",
-    "text": "Hi! I’m Sandrine. This is my personal website. Here you can find a lot of content about Machine Learning, R, Python, Git and GitHub and anytthing I’m interested in. Feel free to explore my website and get in touch if you have any suggestion!"
+    "text": "Hi! I’m Sandrine. This is my personal website. Here you can find a lot of content about Machine Learning, R, Python, Git and GitHub and anything I’m interested in. Feel free to explore my website and get in touch if you have any suggestion!"
   },
   {
     "objectID": "posts/new_post/index.html",
@@ -116,13 +116,69 @@
     "href": "posts/github-docker/index.html#creating-some-files",
     "title": "How to use Github actions to build a docker image",
     "section": "Creating some files",
-    "text": "Creating some files\n\napp.py\n\nprint(\"Hello Test!\")\n\nrequirements.txt\n\n# This file can be left empty or include dependencies\n\n.gitignore\n\n# This file can be left empty or include dependencies\n\nDockerfile\n\n# Use an official Python image as the base\nFROM python:3.11\n\n# Set the working directory in the container\nWORKDIR /app\n\n# Copy project files into the container\nCOPY . /app/\n\n# Create a virtual environment in /app/venv\nRUN python -m venv venv\n\n# Activate the virtual environment and install dependencies\nRUN /app/venv/bin/pip install --upgrade pip && \\\n    /app/venv/bin/pip install --no-cache-dir -r requirements.txt\n\n# Run the application using the virtual environment\nCMD [\"/app/venv/bin/python\", \"app.py\"]\n\ndocker-build.yml\n\nname: Build and Push Docker Image\n\non:\n  push:\n    branches:\n      - main  # Change this if using a different branch\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n\n    steps:\n      - name: Checkout Repository\n        uses: actions/checkout@v3\n\n      - name: Set up Docker Buildx\n        uses: docker/setup-buildx-action@v2\n\n      - name: Log in to DockerHub\n        uses: docker/login-action@v2\n        with:\n          username: ${{ secrets.DOCKER_USERNAME }}\n          password: ${{ secrets.DOCKER_PASSWORD }}\n\n      - name: Build and Push Docker Image\n        uses: docker/build-push-action@v4\n        with:\n          context: .\n          file: ./Dockerfile\n          push: true\n          platforms: linux/amd64,linux/arm64\n          tags: ${{ secrets.DOCKER_USERNAME }}/docker_test:latest\nNote: I set up platforms as I will use the image on a Mac. ## Storing Docker Hub Credentials in GitHub Secrets\nCredentials must be stored securely in GitHub:\n\nGo to GitHub &gt; Your Repository &gt; Settings &gt; Secrets and variables &gt; Actions.\nClick New repository secret and add:\n\nDOCKER_USERNAME = Your DockerHub username.\nDOCKER_PASSWORD = Your DockerHub password.\n\n\nA free DockerHub account allows only one private repository."
+    "text": "Creating some files\n\napp.py\n\nprint(\"Hello Test!\")\n\nrequirements.txt\n\n# This file can be left empty or include dependencies\n\n.gitignore\n\n# This file can be left empty or include dependencies\n\nDockerfile\n\n# Use an official Python image as the base\nFROM python:3.11\n\n# Set the working directory in the container\nWORKDIR /app\n\n# Copy project files into the container\nCOPY . /app/\n\n# Create a virtual environment in /app/venv\nRUN python -m venv venv\n\n# Activate the virtual environment and install dependencies\nRUN /app/venv/bin/pip install --upgrade pip && \\\n    /app/venv/bin/pip install --no-cache-dir -r requirements.txt\n\n# Run the application using the virtual environment\nCMD [\"/app/venv/bin/python\", \"app.py\"]\n\ndocker-build.yml\n\nname: Build and Push Docker Image\n\non:\n  push:\n    branches:\n      - main  # Change this if using a different branch\n\njobs:\n  build:\n    runs-on: ubuntu-latest\n\n    steps:\n      - name: Checkout Repository\n        uses: actions/checkout@v3\n\n      - name: Set up Docker Buildx\n        uses: docker/setup-buildx-action@v2\n\n      - name: Log in to DockerHub\n        uses: docker/login-action@v2\n        with:\n          username: ${{ secrets.DOCKER_USERNAME }}\n          password: ${{ secrets.DOCKER_PASSWORD }}\n\n      - name: Build and Push Docker Image\n        uses: docker/build-push-action@v4\n        with:\n          context: .\n          file: ./Dockerfile\n          push: true\n          platforms: linux/amd64,linux/arm64\n          tags: ${{ secrets.DOCKER_USERNAME }}/docker_test:latest\nNote: I set up platforms as I will use the image on a Mac."
   },
   {
     "objectID": "About.html",
     "href": "About.html",
-    "title": "About",
+    "title": "Bonjour",
     "section": "",
     "text": "Hi! I’m Sandrine. This is my personal website. Here you can find a lot of content about Machine Learning, R, Python, Git and GitHub and anything I’m interested in. Feel free to explore my website and get in touch if you have any suggestion!"
+  },
+  {
+    "objectID": "posts/welcome/index.html#how-to-add-a-new-post",
+    "href": "posts/welcome/index.html#how-to-add-a-new-post",
+    "title": "Welcome To My Blog",
+    "section": "How to add a new post",
+    "text": "How to add a new post\nIt is very easy.\n\nCreate a sub-directory within posts and add an index.qmd file in this directory\n\nThat qmd file is the new blog post and when you render that, the blog home page will automatically update to include the newest post at the top of the listing.\nThen just do quarto preview."
+  },
+  {
+    "objectID": "posts/welcome/index.html#how-to",
+    "href": "posts/welcome/index.html#how-to",
+    "title": "Welcome To My Blog",
+    "section": "How to",
+    "text": "How to"
+  },
+  {
+    "objectID": "posts/welcome/index.html#how-to-update",
+    "href": "posts/welcome/index.html#how-to-update",
+    "title": "Welcome To My Blog",
+    "section": "How to update",
+    "text": "How to update"
+  },
+  {
+    "objectID": "posts/welcome/index.html#how-to-update-css",
+    "href": "posts/welcome/index.html#how-to-update-css",
+    "title": "Welcome To My Blog",
+    "section": "How to update css",
+    "text": "How to update css\nThe easiest way is to open the website in Chrome and look inspect the page. Then when you find exactly the class you want to update, you just update the scss file\nFor example, I wanted the TOC title in blue: I have added\nh2#toc-title {\n  color:$blue;\n}"
+  },
+  {
+    "objectID": "posts/welcome/index.html#using-the-welcome",
+    "href": "posts/welcome/index.html#using-the-welcome",
+    "title": "Welcome To My Blog",
+    "section": "Using the Welcome",
+    "text": "Using the Welcome"
+  },
+  {
+    "objectID": "posts/welcome/index.html#using-the-welcome-post-as-a",
+    "href": "posts/welcome/index.html#using-the-welcome-post-as-a",
+    "title": "Welcome To My Blog",
+    "section": "Using the Welcome Post as a",
+    "text": "Using the Welcome Post as a"
+  },
+  {
+    "objectID": "posts/welcome/index.html#using-the-welcome-post-as-my-ow",
+    "href": "posts/welcome/index.html#using-the-welcome-post-as-my-ow",
+    "title": "Welcome To My Blog",
+    "section": "Using the Welcome Post as my ow",
+    "text": "Using the Welcome Post as my ow"
+  },
+  {
+    "objectID": "posts/welcome/index.html#using-the-welcome-post-as-my-own-manual-for-managing-this-blog",
+    "href": "posts/welcome/index.html#using-the-welcome-post-as-my-own-manual-for-managing-this-blog",
+    "title": "Welcome To My Blog",
+    "section": "Using the Welcome Post as my own manual for managing this blog",
+    "text": "Using the Welcome Post as my own manual for managing this blog"
   }
 ]

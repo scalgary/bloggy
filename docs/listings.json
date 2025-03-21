@@ -2,9 +2,8 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/posts/github-docker/index.html",
-      "/posts/new_post/index.html",
-      "/posts/welcome/index.html"
+      "/posts/welcome/index.html",
+      "/posts/github-docker/index.html"
     ]
   }
 ]

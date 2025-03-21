@@ -154,6 +154,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#setting-up-a-git-repository" id="toc-setting-up-a-git-repository" class="nav-link active" data-scroll-target="#setting-up-a-git-repository">Setting Up a Git Repository</a></li>
   <li><a href="#creating-some-files" id="toc-creating-some-files" class="nav-link" data-scroll-target="#creating-some-files">Creating some files</a></li>
+  <li><a href="#storing-docker-hub-credentials-in-github-secrets" id="toc-storing-docker-hub-credentials-in-github-secrets" class="nav-link" data-scroll-target="#storing-docker-hub-credentials-in-github-secrets">Storing Docker Hub Credentials in GitHub Secrets</a></li>
   <li><a href="#verifying-the-setup" id="toc-verifying-the-setup" class="nav-link" data-scroll-target="#verifying-the-setup">Verifying the Setup</a></li>
   </ul>
 </nav>
@@ -276,7 +277,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">push</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">platforms</span><span class="kw">:</span><span class="at"> linux/amd64,linux/arm64</span></span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">tags</span><span class="kw">:</span><span class="at"> ${{ secrets.DOCKER_USERNAME }}/docker_test:latest</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Note: I set up platforms as I will use the image on a Mac. ## Storing Docker Hub Credentials in GitHub Secrets</p>
+<p>Note: I set up platforms as I will use the image on a Mac.</p>
+</section>
+<section id="storing-docker-hub-credentials-in-github-secrets" class="level2">
+<h2 class="anchored" data-anchor-id="storing-docker-hub-credentials-in-github-secrets">Storing Docker Hub Credentials in GitHub Secrets</h2>
 <p>Credentials must be stored securely in GitHub:</p>
 <ol type="1">
 <li>Go to <strong>GitHub &gt; Your Repository &gt; Settings &gt; Secrets and variables &gt; Actions</strong>.</li>
