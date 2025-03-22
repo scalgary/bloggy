@@ -1,0 +1,17 @@
+---
+comments: false
+citation: false
+title : "Welcome"
+---
+
+I discovered “An Introduction to Statistical Learning” (ISLR) a few years ago, and since then, it’s become my go-to reference for machine learning. A real classic!
+
+Lately, I’ve been itching to dive deeper into the new edition—especially with the updated chapters, Python labs, and all the fresh content.
+
+Between the book itself, the video lectures available on edX (and other platforms), and the awesome book club run by the DSLC community, I’ve really immersed myself in this world.
+
+It’s been the perfect opportunity to revisit the fundamentals with a fresh, more relaxed mindset. Learning just for the joy of it—rather than to pass a test—is a totally different experience. And honestly, it’s so much more satisfying.
+
+To keep a record of this deep dive, I decided to start a blog. The good news? It’s incredibly easy to set up with Quarto, and hosting it on GitHub is a breeze.
+
+I’m not trying to summarize the book or highlight the key concepts. That’s not the goal. I just want to take the time to explore the parts that speak to me—to reflect, to play, to understand better. Kind of like a personal study journal, but online.
