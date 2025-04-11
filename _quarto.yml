@@ -9,8 +9,12 @@ website:
       - text : Blog
         href: blog.qmd
         icon: pen-fill
+      - text :  ISLP
+        href: islp.qmd
+        icon: bookmark-heart
       - text : Sandrine
         href: About.qmd
+        icon: heart-fill
       - icon: github
         href: https://github.com/
 
@@ -22,5 +26,3 @@ format:
       - assets/stylesheets/coeos.scss
     code-block-bg: true
     lang: en
-
-
