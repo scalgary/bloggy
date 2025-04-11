@@ -6,5 +6,11 @@
       "/posts/ISLP1/index.html",
       "/posts/github-docker/index.html"
     ]
+  },
+  {
+    "listing": "/islp.html",
+    "items": [
+      "/ISLP/index.html"
+    ]
   }
 ]

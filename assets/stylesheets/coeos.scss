@@ -117,7 +117,6 @@ $nav-tabs-link-hover-border-color: $nav-tabs-border-color !default;
 $nav-tabs-link-active-color: $contrast-bg !default;
 $nav-tabs-link-active-bg: $nav-tabs-border-color !default;
 $nav-tabs-link-active-border-color: $nav-tabs-border-color !default;
-
 // Navbar
 
 $navbar-dark-hover-color: $contrast-bg !default;
@@ -273,7 +272,7 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Alegreya+Sans:wght@300,
   .show>.nav-link,
   .active>.nav-link,
   .nav-link.active {
-    color: $body-color;
+    color: $blue;
   }
 
   .nav-link:hover,
@@ -724,6 +723,7 @@ h2#toc-title {
   color:$blue;
 }
 
+
 .sandrine{
   color:$body-color;
 }
@@ -736,4 +736,22 @@ h2#toc-title {
 
 .sandrine a:hover  {
   color:$gray-600;
+}
+
+
+.sidebar nav[role=doc-toc]>ul li a {
+color: $gray-400;
+}
+.sidebar nav[role=doc-toc] > ul li a.active {
+  color: $blue; // ou une autre couleur SCSS
+  border-left: solid;
+}
+h4 {
+  color: $blue;
+}
+
+.sidebar nav[role="doc-toc"] ul > li > a.active {
+  color: $white !important;
+  background-color: $gray-400;
+  font-weight: bold;
 }
