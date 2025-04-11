@@ -10,3 +10,5 @@ site_libs/
 .quarto/
 .quarto/preview/
 .quarto/idx/
+.env/
+.Rproj.user
