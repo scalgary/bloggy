@@ -746,8 +746,15 @@ color: $gray-400;
   color: $blue; // ou une autre couleur SCSS
   border-left: solid;
 }
-h4 {
+h4{
   color: $blue;
+  border-bottom: 1px solid #979797;
+}
+
+
+h5{
+  color: $blue;
+
 }
 
 .sidebar nav[role="doc-toc"] ul > li > a.active {

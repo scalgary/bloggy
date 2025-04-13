@@ -2,13 +2,9 @@
 title: "Welcome"
 page-layout: full
 toc: true
-toc-depth: 4
-
-editor: visual
+toc-depth: 6
 jupyter: python3
 ---
-
-
 
 I discovered “An Introduction to Statistical Learning” (ISLR) a few years ago, and since then, it’s become my go-to reference for machine learning. Lately, I’ve been itching to dive deeper into the new edition—especially with the updated chapters, Python labs, and all the fresh content.
 
@@ -21,30 +17,38 @@ To keep a record of this deep dive, I decided to start a blog. The good news? It
 
 I’m not trying to summarize the book or highlight the key concepts. That’s not the goal. I just want to take the time to explore the parts that speak to me—to reflect, to play, to understand better. Kind of like a personal study journal, but online.
 
+#### 1-Classification
 
-#### 1 - Classification
+##### Bayses classifiers
+::: {.sandrine}
+Let us focus on understanding the differences between 3 classifiers : **Naive Bayses**, **Linear Discriminant Analysis**, and **Quadratic Discriminant Analysis**.
+:::
 
-##### LDA, QDA, Naive Bayses
+-   Naive Bayses assume that within the kth class, the p preditors are **independent**.
+-   LDA assume that the observations are drawn from a multivariate Gaussian $X \sim \mathcal{N}(\mu_k, \Sigma)$
+-   QDA assume that each class has its own covariance matrix $X \sim \mathcal{N}(\mu_k, \Sigma_k)$ 
 
-#### Naive Bayses
+Principle: We model the distribution of X in each of the classes separately and then we use Bayses theorem to flip things around to obtain Pr(Y|X).
+By choice, we use the normal (Gaussian) distribution.
 
-We model the distribution of X in each of the classes separately and then we use Bayses theorem to flip things around to obtain Pr(Y\|X).
 
--   Naive Bayses assume the features to be independant.
--   LDA assume the covariance to be the same for all the classes.
--   QDA assume the covariance to be different.
 
-#### Discriminant Analysis:
 
-We model the distribution of X in each of the classes separately and then we use Bayses theorem to flip things around to obtain Pr(Y\|X).
-
-By choice, we use the normal (Gaussian) distribution
 
 $$
 Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 $$
 
+
+Let us just try on simulated data.
+
+::: {.sandrine}
+###### **Comparation between "manual" and "sklearn" models** 
+:::
+
 ```{python}
+#| code-fold: true
+#| code-summary: "💻 Data Simulation"
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -53,109 +57,205 @@ from sklearn.metrics import classification_report
 # Fixer le seed pour la reproductibilité
 np.random.seed(42)
 
-# Nombre d'observations par classe
-n = 20
+# 2. Taille des classes
+n_0 = 100  # classe majoritaire
+n_1 = 40   # classe minoritaire
 
-# Génération des données pour la classe 0 (centre = [1, 1])
-X0 = np.random.multivariate_normal(mean=[1, 1], cov=[[1, 0.5], [0.5, 1]], size=n)
-y0 = np.zeros(n)
+# 3. Paramètres des distributions
+# Classe 0 : petite variance, forte corrélation
+mean_0 = [0, 0]
+cov_0 = [[1, 0.8], [0.8, 1]]
+X0 = np.random.multivariate_normal(mean_0, cov_0, size=n_0)
+y0 = np.zeros(n_0)
 
-# Génération des données pour la classe 1 (centre = [3, 3])
-X1 = np.random.multivariate_normal(mean=[3, 3], cov=[[1, 0.5], [0.5, 1]], size=n)
-y1 = np.ones(n)
+# Classe 1 : plus grande variance, faible corrélation
+mean_1 = [3, 3]
+cov_1 = [[2, 0.2], [0.2, 2]]
+X1 = np.random.multivariate_normal(mean_1, cov_1, size=n_1)
+y1 = np.ones(n_1)
 
-# Combinaison des deux classes
+# 4. Fusionner les données
 X = np.vstack((X0, X1))
 y = np.hstack((y0, y1))
 
 # Mise en DataFrame
-df = pd.DataFrame(X, columns=['X1', 'X2'])
-df['Y'] = y.astype(int)
 
-# Visualisation rapide
-plt.figure(figsize=(6, 5))
-plt.scatter(df[df.Y == 0]['X1'], df[df.Y == 0]['X2'], label='Classe 0', alpha=0.7)
-plt.scatter(df[df.Y == 1]['X1'], df[df.Y == 1]['X2'], label='Classe 1', alpha=0.7)
-plt.xlabel("X1")
-plt.ylabel("X2")
-plt.title("Données simulées")
-plt.legend()
-plt.grid(True)
-plt.show()
+# 5. Création du DataFrame
+df = pd.DataFrame(X, columns=["X1", "X2"])
+df["Y"] = y.astype(int)
 
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: "💻 Manual Classifiers"
 # Aperçu des données
-print(df.head())
+
 
 # 2. Estimer les paramètres nécessaires
 
 # Séparer les classes
 df_class0 = df[df['Y'] == 0]
+n_0 = len(df_class0)
 df_class1 = df[df['Y'] == 1]
+n_1 = len(df_class1) 
+
+
 
 # Probabilités a priori
-prior_0 = len(df_class0) / len(df)
-prior_1 = len(df_class1) / len(df)
+prior_0 = n_0 / len(df)
+prior_1 = n_1 / len(df)
 
 # Moyennes et variances (indépendance des features)
-mean_0 = df_class0[['X1', 'X2']].mean()
+mu_0 = df_class0[['X1', 'X2']].mean()
 var_0 = df_class0[['X1', 'X2']].var()
 
-mean_1 = df_class1[['X1', 'X2']].mean()
+mu_1 = df_class1[['X1', 'X2']].mean()
 var_1 = df_class1[['X1', 'X2']].var()
 
 
 # Matrices de covariance individuelles
 cov_0 = np.cov(df_class0[['X1', 'X2']].T)
 cov_1 = np.cov(df_class1[['X1', 'X2']].T)
-
+det_cov_0 = np.linalg.det(cov_0)
+det_cov_1 = np.linalg.det(cov_1)
+inv_cov_0 = np.linalg.inv(cov_0)
+inv_cov_1 = np.linalg.inv(cov_1)
 # Matrice de covariance commune (pooled)
-pooled_cov = ((n - 1) * cov_0 + (n - 1) * cov_1) / (2 * n - 2)
+pooled_cov = ((n_0 - 1) * cov_0 + (n_1 - 1) * cov_1) / (n_0 + n_1 - 2)
 inv_pooled_cov = np.linalg.inv(pooled_cov)
 
 
-# 3. Fonction discriminante LDA
-def lda_discriminant(x, mu, inv_cov, prior):
-    return x @ inv_cov @ mu - 0.5 * mu.T @ inv_cov @ mu + np.log(prior)
 
 
 # Fonction de densité gaussienne
 def gaussian_pdf(x, mean, var):
     return (1.0 / np.sqrt(2 * np.pi * var)) * np.exp(- ((x - mean) ** 2) / (2 * var))
 
-# Prédiction Naive Bayes
+# 3. Fonction discriminante LDA
+def lda_discriminant(x, mu, inv_cov, prior):
+    return x @ inv_cov @ mu - 0.5 * mu.T @ inv_cov @ mu + np.log(prior)
+
+# --- QDA : fonction discriminante ---
+def qda_discriminant(x, mu, inv_cov, det_cov, prior):
+    return -0.5 * np.log(det_cov) - 0.5 * (x - mu).T @ inv_cov @ (x - mu) + np.log(prior)
+
+    
+# --- Naive Bayes : prédiction manuelle ---
 def predict_naive_bayes(x):
-    prob_0 = prior_0
-    prob_1 = prior_1
-    for i, feature in enumerate(['X1', 'X2']):
-        prob_0 *= gaussian_pdf(x[i], mean_0[feature], var_0[feature])
-        prob_1 *= gaussian_pdf(x[i], mean_1[feature], var_1[feature])
-    return 0 if prob_0 > prob_1 else 1
+    # x est un vecteur numpy, ex : [x1, x2]
+    probs_0 = gaussian_pdf(x, mu_0.values, var_0.values)
+    probs_1 = gaussian_pdf(x, mu_1.values, var_1.values)
+    
+    likelihood_0 = np.prod(probs_0) * prior_0
+    likelihood_1 = np.prod(probs_1) * prior_1
+    
+    return 0 if likelihood_0 > likelihood_1 else 1
 
-# Appliquer à toutes les observations
+# --- LDA : fonction discriminante déjà définie ---
+def predict_lda(x):
+    score_0 = lda_discriminant(x, mu_0, inv_pooled_cov, prior_0)
+    score_1 = lda_discriminant(x, mu_1, inv_pooled_cov, prior_1)
+    return 0 if score_0 > score_1 else 1
+
+
+# --- QDA : prédiction manuelle ---
+def predict_qda(x):
+    score_0 = qda_discriminant(x, mu_0, inv_cov_0, det_cov_0, prior_0)
+    score_1 = qda_discriminant(x, mu_1, inv_cov_1, det_cov_1, prior_1)
+    return 0 if score_0 > score_1 else 1
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: "💻 Modelisation"
+# Récupération des observations
 X_values = df[['X1', 'X2']].values
-naive_preds = np.array([predict_naive_bayes(x) for x in X_values])
+from sklearn.metrics import classification_report
+from sklearn.naive_bayes import GaussianNB
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
+from sklearn.metrics import classification_report
+# Dictionnaire des fonctions de prédiction manuelle
+all_models = {"manual" :{
+    "Naive Bayes (manual)": predict_naive_bayes,
+    "LDA (manual)": predict_lda,
+    "QDA (manual)": predict_qda},
+    "non_manual":{
+     "Naive Bayes": GaussianNB(),
+    "LDA": LinearDiscriminantAnalysis(),
+    "QDA": QuadraticDiscriminantAnalysis()}
+}
 
+# Appliquer chaque prédicteur et stocker l'accuracy
+all_accuracies = {}
+# Application de chaque modèle
+for kind, models in all_models.items():
+    for name, model in models.items():
+        if kind == "manual":
+            preds = np.array([model(x) for x in X_values])
+        else:  # sklearn
+            model.fit(X_values, y)
+            preds = model.predict(X_values)
+        acc = classification_report(y, preds, output_dict=True)["accuracy"]
+        all_accuracies[name] = acc
 
-# Évaluation
-print(classification_report(df["Y"], naive_preds))
+    
 
-# 3. Visualisation (optionnelle)
-plt.figure(figsize=(6, 5))
-plt.scatter(df['X1'], df['X2'], c=naive_preds, cmap='bwr', edgecolor='k', alpha=0.6)
-plt.title("Prédictions Naive Bayes")
-plt.xlabel("X1")
-plt.ylabel("X2")
-plt.grid(True)
-plt.show()
+# Affichage
+#for name, acc in all_accuracies.items():
+#    print(f"{name}: {acc:.3f}")
+
+    # Créer un DataFrame pour affichage
+accuracy_df = pd.DataFrame.from_dict(all_accuracies, orient="index", columns=["Accuracy"])
+accuracy_df.index.name = "Model"
+
 
 ```
 
-$$
-f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \cdot \exp\left( -\frac{(x - \mu)^2}{2\sigma^2} \right)
-$$
 
-$$
-\delta_k(x) = x^\top \Sigma^{-1} \mu_k - \frac{1}{2} \mu_k^\top \Sigma^{-1} \mu_k + \log(\pi_k)
-$$
+<details>
+<summary>📊 Données simulées par classe</summary>
+
+```{python}
+#| code-fold: true
+#| layout-ncol: 2
+
+plt.figure(figsize=(6, 5))
+plt.scatter(df[df.Y == 0]['X1'], df[df.Y == 0]['X2'], label='Classe 0', alpha=0.7)
+plt.scatter(df[df.Y == 1]['X1'], df[df.Y == 1]['X2'], label='Classe 1', alpha=0.7)
+plt.xlabel("X1")
+plt.ylabel("X2")
+plt.title("Simulated Data")
+plt.legend()
+plt.grid(True)
+#plt.show()
+
+# Visualisation 2
+# Affichage
+#print(accuracy_df)
+from IPython.display import display, Markdown
+
+# Arrondir les valeurs à 3 décimales
+accuracy_df_rounded = accuracy_df.copy()
+accuracy_df_rounded["Accuracy"] = accuracy_df_rounded["Accuracy"].apply(lambda x: f"{x:.3f}")
+
+# Générer le Markdown avec contrôle CSS
+md_table = accuracy_df_rounded.to_markdown()
+
+# CSS pour contrôler la largeur des colonnes (via HTML table styling)
+style = """
+<style>
+</style>
+"""
+
+# Affichage avec Markdown + style HTML
+display(Markdown(md_table))
+```
+
+</details>
 
 
+
+::: {.sandrine}
+###### **Comparation between "manual" and "sklearn" models** 
+:::
