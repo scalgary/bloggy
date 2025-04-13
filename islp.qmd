@@ -84,6 +84,17 @@ y = np.hstack((y0, y1))
 df = pd.DataFrame(X, columns=["X1", "X2"])
 df["Y"] = y.astype(int)
 
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler(with_mean=True,
+                        with_std=True,
+                        copy=True)
+scaler.fit(df[['X1', 'X2']])
+X_std = scaler.transform(df[['X1', 'X2']])       
+
+df_scale = pd.DataFrame(
+                 X_std,
+                 columns=['X1', 'X2'])
+df_scale["Y"] = y.astype(int)
 ```
 
 ```{python}
@@ -94,36 +105,53 @@ df["Y"] = y.astype(int)
 
 # 2. Estimer les paramètres nécessaires
 
-# Séparer les classes
-df_class0 = df[df['Y'] == 0]
-n_0 = len(df_class0)
-df_class1 = df[df['Y'] == 1]
-n_1 = len(df_class1) 
+def get_stat(df):
+   # Séparer les classes
+    df_class0 = df[df['Y'] == 0]
+    n_0 = len(df_class0)
+    df_class1 = df[df['Y'] == 1]
+    n_1 = len(df_class1) 
 
 
 
-# Probabilités a priori
-prior_0 = n_0 / len(df)
-prior_1 = n_1 / len(df)
+    # Probabilités a priori
+    prior_0 = n_0 / len(df)
+    prior_1 = n_1 / len(df)
 
-# Moyennes et variances (indépendance des features)
-mu_0 = df_class0[['X1', 'X2']].mean()
-var_0 = df_class0[['X1', 'X2']].var()
+    # Moyennes et variances (indépendance des features)
+    mu_0 = df_class0[['X1', 'X2']].mean()
+    var_0 = df_class0[['X1', 'X2']].var()
 
-mu_1 = df_class1[['X1', 'X2']].mean()
-var_1 = df_class1[['X1', 'X2']].var()
+    mu_1 = df_class1[['X1', 'X2']].mean()
+    var_1 = df_class1[['X1', 'X2']].var()
 
 
-# Matrices de covariance individuelles
-cov_0 = np.cov(df_class0[['X1', 'X2']].T)
-cov_1 = np.cov(df_class1[['X1', 'X2']].T)
-det_cov_0 = np.linalg.det(cov_0)
-det_cov_1 = np.linalg.det(cov_1)
-inv_cov_0 = np.linalg.inv(cov_0)
-inv_cov_1 = np.linalg.inv(cov_1)
-# Matrice de covariance commune (pooled)
-pooled_cov = ((n_0 - 1) * cov_0 + (n_1 - 1) * cov_1) / (n_0 + n_1 - 2)
-inv_pooled_cov = np.linalg.inv(pooled_cov)
+    # Matrices de covariance individuelles
+    cov_0 = np.cov(df_class0[['X1', 'X2']].T)
+    cov_1 = np.cov(df_class1[['X1', 'X2']].T)
+    det_cov_0 = np.linalg.det(cov_0)
+    det_cov_1 = np.linalg.det(cov_1)
+    inv_cov_0 = np.linalg.inv(cov_0)
+    inv_cov_1 = np.linalg.inv(cov_1)
+    # Matrice de covariance commune (pooled)
+    pooled_cov = ((n_0 - 1) * cov_0 + (n_1 - 1) * cov_1) / (n_0 + n_1 - 2)
+    inv_pooled_cov = np.linalg.inv(pooled_cov)
+    dict_values ={
+        "prior_0": prior_0,
+        "prior_1": prior_1,
+        "mu_0" :mu_0,
+        "mu_1" :mu_1,
+        "var_0" :var_0,
+        "var_1" :var_1,
+        "inv_cov_0": inv_cov_0,
+        "inv_cov_1": inv_cov_1,
+        "det_cov_0" :det_cov_0,
+        "det_cov_1" :det_cov_1,
+        "inv_pooled_cov": inv_pooled_cov
+
+
+    }
+    return dict_values
 
 
 
@@ -142,27 +170,22 @@ def qda_discriminant(x, mu, inv_cov, det_cov, prior):
 
     
 # --- Naive Bayes : prédiction manuelle ---
-def predict_naive_bayes(x):
-    # x est un vecteur numpy, ex : [x1, x2]
-    probs_0 = gaussian_pdf(x, mu_0.values, var_0.values)
-    probs_1 = gaussian_pdf(x, mu_1.values, var_1.values)
-    
-    likelihood_0 = np.prod(probs_0) * prior_0
-    likelihood_1 = np.prod(probs_1) * prior_1
-    
+def predict_naive_bayes(x, stats):
+    probs_0 = gaussian_pdf(x, stats["mu_0"].values, stats["var_0"].values)
+    probs_1 = gaussian_pdf(x, stats["mu_1"].values, stats["var_1"].values)
+    likelihood_0 = np.prod(probs_0) * stats["prior_0"]
+    likelihood_1 = np.prod(probs_1) * stats["prior_1"]
     return 0 if likelihood_0 > likelihood_1 else 1
 
-# --- LDA : fonction discriminante déjà définie ---
-def predict_lda(x):
-    score_0 = lda_discriminant(x, mu_0, inv_pooled_cov, prior_0)
-    score_1 = lda_discriminant(x, mu_1, inv_pooled_cov, prior_1)
+def predict_lda(x, stats):
+  
+    score_0 = lda_discriminant(x, stats["mu_0"].values, stats["inv_pooled_cov"], stats["prior_0"])
+score_1 = lda_discriminant(x, stats["mu_1"].values, stats["inv_pooled_cov"], stats["prior_1"])
     return 0 if score_0 > score_1 else 1
 
-
-# --- QDA : prédiction manuelle ---
-def predict_qda(x):
-    score_0 = qda_discriminant(x, mu_0, inv_cov_0, det_cov_0, prior_0)
-    score_1 = qda_discriminant(x, mu_1, inv_cov_1, det_cov_1, prior_1)
+def predict_qda(x, stats):
+    score_0 = qda_discriminant(x, stats["mu_0"], stats["inv_cov_0"], stats["det_cov_0"], stats["prior_0"])
+    score_1 = qda_discriminant(x, stats["mu_1"], stats["inv_cov_1"], stats["det_cov_1"], stats["prior_1"])
     return 0 if score_0 > score_1 else 1
 ```
 
@@ -171,34 +194,64 @@ def predict_qda(x):
 #| code-summary: "💻 Modelisation"
 # Récupération des observations
 X_values = df[['X1', 'X2']].values
+X_values_scale = df_scale[['X1', 'X2']].values
 from sklearn.metrics import classification_report
 from sklearn.naive_bayes import GaussianNB
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
+from sklearn.neighbors import KNeighborsClassifier
+import statsmodels.api as sm
+
 from sklearn.metrics import classification_report
 # Dictionnaire des fonctions de prédiction manuelle
-all_models = {"manual" :{
-    "Naive Bayes (manual)": predict_naive_bayes,
-    "LDA (manual)": predict_lda,
-    "QDA (manual)": predict_qda},
-    "non_manual":{
-     "Naive Bayes": GaussianNB(),
-    "LDA": LinearDiscriminantAnalysis(),
-    "QDA": QuadraticDiscriminantAnalysis()}
-}
+def calcul_accuracy(df):
+    X_values = df[['X1', 'X2']].values
+    y = df["Y"].values
+    stats = get_stat(df)
 
-# Appliquer chaque prédicteur et stocker l'accuracy
-all_accuracies = {}
-# Application de chaque modèle
-for kind, models in all_models.items():
-    for name, model in models.items():
-        if kind == "manual":
-            preds = np.array([model(x) for x in X_values])
-        else:  # sklearn
-            model.fit(X_values, y)
-            preds = model.predict(X_values)
+    # Re-définir les fonctions manuelles en utilisant les stats locales
+    manual_models = {
+        "Naive Bayes (manual)": lambda x: predict_naive_bayes(x, stats),
+        "LDA (manual)": lambda x: predict_lda(x, stats),
+        "QDA (manual)": lambda x: predict_qda(x, stats)
+    }
+
+    # Inclure aussi les modèles sklearn
+    non_manual_models = {
+        "Naive Bayes": GaussianNB(),
+        "LDA": LinearDiscriminantAnalysis(),
+        "QDA": QuadraticDiscriminantAnalysis(),
+        "KNN1": KNeighborsClassifier(n_neighbors=1),
+        "KNN2": KNeighborsClassifier(n_neighbors=2),
+        "KNN3": KNeighborsClassifier(n_neighbors=3),
+        "KNN4": KNeighborsClassifier(n_neighbors=4),
+        "KNN5": KNeighborsClassifier(n_neighbors=5),
+        "GLM (Binomial)": "glm"
+    }
+
+    all_accuracies = {}
+
+    # Prédictions manuelles
+    for name, predict_func in manual_models.items():
+        preds = np.array([predict_func(x) for x in X_values])
         acc = classification_report(y, preds, output_dict=True)["accuracy"]
         all_accuracies[name] = acc
 
+    # Prédictions non manuelles
+    for name, model in non_manual_models.items():
+        if model == "glm":
+            X_glm = sm.add_constant(X_values)
+            glm = sm.GLM(y, X_glm, family=sm.families.Binomial())
+            glm_result = glm.fit()
+            probs = glm_result.predict(X_glm)
+            preds = (probs >= 0.5).astype(int)
+        else:
+            model.fit(X_values, y)
+            preds = model.predict(X_values)
+
+        acc = classification_report(y, preds, output_dict=True)["accuracy"]
+        all_accuracies[name] = acc
+
+    return all_accuracies
     
 
 # Affichage
@@ -206,7 +259,13 @@ for kind, models in all_models.items():
 #    print(f"{name}: {acc:.3f}")
 
     # Créer un DataFrame pour affichage
-accuracy_df = pd.DataFrame.from_dict(all_accuracies, orient="index", columns=["Accuracy"])
+accuracy_raw = calcul_accuracy(df)
+accuracy_scale = calcul_accuracy(df_scale)
+
+accuracy_df = pd.DataFrame({
+    "accuracy_raw": pd.Series(accuracy_raw),
+    "accuracy_scale": pd.Series(accuracy_scale)})
+
 accuracy_df.index.name = "Model"
 
 
