@@ -1,0 +1,32 @@
+<script>
+    function graph_fold() {
+      const cells = document.querySelectorAll('.cell');
+    
+      cells.forEach(cell => {
+        const stdout = cell.querySelector(".cell-output-stdout pre");
+        let titleText = "Graphique";
+    
+        if (stdout && stdout.textContent.startsWith("GRAPH_TITLE:")) {
+          titleText = stdout.textContent.replace("GRAPH_TITLE:", "").trim();
+          stdout.parentElement.remove(); // retire le <pre>
+        }
+    
+        const displays = cell.querySelectorAll(".cell-output-display");
+    
+        displays.forEach(display => {
+          const images = display.querySelectorAll("img");
+    
+          images.forEach(img => {
+            const details = document.createElement("details");
+            const summary = document.createElement("summary");
+            summary.innerText = titleText;
+            details.appendChild(summary);
+            details.appendChild(img.cloneNode(true));
+            display.replaceChild(details, img);
+          });
+        });
+      });
+    }
+    
+    window.addEventListener("load", graph_fold);
+    </script>
