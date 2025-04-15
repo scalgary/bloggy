@@ -17,69 +17,10 @@ To keep a record of this deep dive, I decided to start a blog. The good news? It
 
 I’m not trying to summarize the book or highlight the key concepts. That’s not the goal. I just want to take the time to explore the parts that speak to me—to reflect, to play, to understand better. Kind of like a personal study journal, but online.
 
-All my modest reflections can be found under “ISLP” in the top banner of this website.
+::: {.sandrine}
+All my modest reflections can be found under **ISLP** in the top banner of this website.
+:::
 
 
 
 
-
-```{python}
-#| code-fold: true
-#| code-summary: "💻 Data Simulation"
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.metrics import classification_report
-
-# Fixer le seed pour la reproductibilité
-np.random.seed(42)
-
-# Nombre d'observations par classe
-n = 20
-
-# Génération des données pour la classe 0 (centre = [1, 1])
-X0 = np.random.multivariate_normal(mean=[1, 1], cov=[[1, 0.5], [0.5, 1]], size=n)
-y0 = np.zeros(n)
-
-# Génération des données pour la classe 1 (centre = [3, 3])
-X1 = np.random.multivariate_normal(mean=[3, 3], cov=[[1, 0.5], [0.5, 1]], size=n)
-y1 = np.ones(n)
-
-# Combinaison des deux classes
-X = np.vstack((X0, X1))
-y = np.hstack((y0, y1))
-
-# Mise en DataFrame
-df = pd.DataFrame(X, columns=['X1', 'X2'])
-df['Y'] = y.astype(int)
-```
-
-
-
-
-<details>
-<summary>📊 Données simulées par classe</summary>
-
-```{python}
-#| code-fold: true
-#| layout-ncol: 2
-
-plt.figure(figsize=(6, 5))
-plt.scatter(df[df.Y == 0]['X1'], df[df.Y == 0]['X2'], label='Class 0', alpha=0.7)
-plt.scatter(df[df.Y == 1]['X1'], df[df.Y == 1]['X2'], label='Classe 1', alpha=0.7)
-plt.xlabel("X1")
-plt.ylabel("X2")
-plt.title("Simulated Data")
-plt.legend()
-plt.grid(True)
-plt.show()
-
-# Visualisation 2
-plt.figure(figsize=(6, 5))
-plt.hist(df['X1'], bins=20, color='skyblue')
-plt.title("Distribution de X1")
-plt.grid(True)
-plt.show()
-```
-
-</details>

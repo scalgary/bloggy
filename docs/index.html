@@ -148,36 +148,6 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
  <!-- /main -->
-<script>
-    function graph_fold() {
-      const cells = document.querySelectorAll('.cell');
-    
-      cells.forEach(cell => {
-        const stdout = cell.querySelector(".cell-output-stdout pre");
-        let titleText = "Graphique"; // par défaut
-    
-        if (stdout && stdout.textContent.startsWith("GRAPH_TITLE:")) {
-          titleText = stdout.textContent.replace("GRAPH_TITLE:", "").trim();
-          stdout.parentElement.remove(); // retire le bloc <pre>
-        }
-    
-        const display = cell.querySelector(".cell-output-display");
-        const img = display?.querySelector("img");
-    
-        if (img) {
-          const details = document.createElement("details");
-          const summary = document.createElement("summary");
-          summary.innerText = titleText;
-    
-          details.appendChild(summary);
-          details.appendChild(img.cloneNode(true));
-          display.replaceChild(details, img);
-        }
-      });
-    }
-    
-    window.addEventListener("load", graph_fold);
-    </script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

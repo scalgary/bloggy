@@ -180,7 +180,7 @@ def predict_naive_bayes(x, stats):
 def predict_lda(x, stats):
   
     score_0 = lda_discriminant(x, stats["mu_0"].values, stats["inv_pooled_cov"], stats["prior_0"])
-score_1 = lda_discriminant(x, stats["mu_1"].values, stats["inv_pooled_cov"], stats["prior_1"])
+    score_1 = lda_discriminant(x, stats["mu_1"].values, stats["inv_pooled_cov"], stats["prior_1"])
     return 0 if score_0 > score_1 else 1
 
 def predict_qda(x, stats):
@@ -264,7 +264,7 @@ accuracy_scale = calcul_accuracy(df_scale)
 
 accuracy_df = pd.DataFrame({
     "accuracy_raw": pd.Series(accuracy_raw),
-    "accuracy_scale": pd.Series(accuracy_scale)})
+    "accuracy_scale": pd.Series(accuracy_scale)}).round(3)
 
 accuracy_df.index.name = "Model"
 
@@ -294,12 +294,10 @@ plt.grid(True)
 #print(accuracy_df)
 from IPython.display import display, Markdown
 
-# Arrondir les valeurs à 3 décimales
-accuracy_df_rounded = accuracy_df.copy()
-accuracy_df_rounded["Accuracy"] = accuracy_df_rounded["Accuracy"].apply(lambda x: f"{x:.3f}")
+
 
 # Générer le Markdown avec contrôle CSS
-md_table = accuracy_df_rounded.to_markdown()
+md_table = accuracy_df.to_markdown()
 
 # CSS pour contrôler la largeur des colonnes (via HTML table styling)
 style = """
@@ -314,7 +312,3 @@ display(Markdown(md_table))
 </details>
 
 
-
-::: {.sandrine}
-###### **Comparation between "manual" and "sklearn" models** 
-:::

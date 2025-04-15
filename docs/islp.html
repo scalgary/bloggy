@@ -191,7 +191,6 @@ window.Quarto = {
   <li><a href="#bayses-classifiers" id="toc-bayses-classifiers" class="nav-link" data-scroll-target="#bayses-classifiers">Bayses classifiers</a>
   <ul>
   <li><a href="#comparation-between-manual-and-sklearn-models" id="toc-comparation-between-manual-and-sklearn-models" class="nav-link" data-scroll-target="#comparation-between-manual-and-sklearn-models"><strong>Comparation between “manual” and “sklearn” models</strong></a></li>
-  <li><a href="#comparation-between-manual-and-sklearn-models-1" id="toc-comparation-between-manual-and-sklearn-models-1" class="nav-link" data-scroll-target="#comparation-between-manual-and-sklearn-models-1"><strong>Comparation between “manual” and “sklearn” models</strong></a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -244,7 +243,7 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <section id="comparation-between-manual-and-sklearn-models" class="level6 sandrine">
 <h6 class="anchored" data-anchor-id="comparation-between-manual-and-sklearn-models"><strong>Comparation between “manual” and “sklearn” models</strong></h6>
 </section>
-<div id="6861e84d" class="cell" data-execution_count="1">
+<div id="504fd600" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>💻 Data Simulation</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -291,10 +290,11 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>df_scale <span class="op">=</span> pd.DataFrame(</span>
 <span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>                 X_std,</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>                 columns<span class="op">=</span>[<span class="st">'X1'</span>, <span class="st">'X2'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>                 columns<span class="op">=</span>[<span class="st">'X1'</span>, <span class="st">'X2'</span>])</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>df_scale[<span class="st">"Y"</span>] <span class="op">=</span> y.astype(<span class="bu">int</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="5e08e167" class="cell" data-execution_count="2">
+<div id="2e70b7fa" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>💻 Manual Classifiers</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aperçu des données</span></span>
@@ -302,79 +302,91 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Estimer les paramètres nécessaires</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Séparer les classes</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>df_class0 <span class="op">=</span> df[df[<span class="st">'Y'</span>] <span class="op">==</span> <span class="dv">0</span>]</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>n_0 <span class="op">=</span> <span class="bu">len</span>(df_class0)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>df_class1 <span class="op">=</span> df[df[<span class="st">'Y'</span>] <span class="op">==</span> <span class="dv">1</span>]</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>n_1 <span class="op">=</span> <span class="bu">len</span>(df_class1) </span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_stat(df):</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>   <span class="co"># Séparer les classes</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    df_class0 <span class="op">=</span> df[df[<span class="st">'Y'</span>] <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    n_0 <span class="op">=</span> <span class="bu">len</span>(df_class0)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    df_class1 <span class="op">=</span> df[df[<span class="st">'Y'</span>] <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    n_1 <span class="op">=</span> <span class="bu">len</span>(df_class1) </span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Probabilités a priori</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>prior_0 <span class="op">=</span> n_0 <span class="op">/</span> <span class="bu">len</span>(df)</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>prior_1 <span class="op">=</span> n_1 <span class="op">/</span> <span class="bu">len</span>(df)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Moyennes et variances (indépendance des features)</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>mu_0 <span class="op">=</span> df_class0[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].mean()</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>var_0 <span class="op">=</span> df_class0[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].var()</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>mu_1 <span class="op">=</span> df_class1[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].mean()</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>var_1 <span class="op">=</span> df_class1[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].var()</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Probabilités a priori</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    prior_0 <span class="op">=</span> n_0 <span class="op">/</span> <span class="bu">len</span>(df)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    prior_1 <span class="op">=</span> n_1 <span class="op">/</span> <span class="bu">len</span>(df)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Moyennes et variances (indépendance des features)</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    mu_0 <span class="op">=</span> df_class0[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].mean()</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    var_0 <span class="op">=</span> df_class0[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].var()</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    mu_1 <span class="op">=</span> df_class1[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].mean()</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    var_1 <span class="op">=</span> df_class1[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].var()</span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Matrices de covariance individuelles</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>cov_0 <span class="op">=</span> np.cov(df_class0[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].T)</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>cov_1 <span class="op">=</span> np.cov(df_class1[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].T)</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>det_cov_0 <span class="op">=</span> np.linalg.det(cov_0)</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>det_cov_1 <span class="op">=</span> np.linalg.det(cov_1)</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>inv_cov_0 <span class="op">=</span> np.linalg.inv(cov_0)</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>inv_cov_1 <span class="op">=</span> np.linalg.inv(cov_1)</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Matrice de covariance commune (pooled)</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>pooled_cov <span class="op">=</span> ((n_0 <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> cov_0 <span class="op">+</span> (n_1 <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> cov_1) <span class="op">/</span> (n_0 <span class="op">+</span> n_1 <span class="op">-</span> <span class="dv">2</span>)</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>inv_pooled_cov <span class="op">=</span> np.linalg.inv(pooled_cov)</span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Fonction de densité gaussienne</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gaussian_pdf(x, mean, var):</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="fl">1.0</span> <span class="op">/</span> np.sqrt(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> var)) <span class="op">*</span> np.exp(<span class="op">-</span> ((x <span class="op">-</span> mean) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> var))</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Fonction discriminante LDA</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lda_discriminant(x, mu, inv_cov, prior):</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">@</span> inv_cov <span class="op">@</span> mu <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> mu.T <span class="op">@</span> inv_cov <span class="op">@</span> mu <span class="op">+</span> np.log(prior)</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co"># --- QDA : fonction discriminante ---</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> qda_discriminant(x, mu, inv_cov, det_cov, prior):</span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> np.log(det_cov) <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> (x <span class="op">-</span> mu).T <span class="op">@</span> inv_cov <span class="op">@</span> (x <span class="op">-</span> mu) <span class="op">+</span> np.log(prior)</span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Naive Bayes : prédiction manuelle ---</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict_naive_bayes(x):</span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    <span class="co"># x est un vecteur numpy, ex : [x1, x2]</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    probs_0 <span class="op">=</span> gaussian_pdf(x, mu_0.values, var_0.values)</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    probs_1 <span class="op">=</span> gaussian_pdf(x, mu_1.values, var_1.values)</span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    likelihood_0 <span class="op">=</span> np.prod(probs_0) <span class="op">*</span> prior_0</span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    likelihood_1 <span class="op">=</span> np.prod(probs_1) <span class="op">*</span> prior_1</span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span> <span class="cf">if</span> likelihood_0 <span class="op">&gt;</span> likelihood_1 <span class="cf">else</span> <span class="dv">1</span></span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="co"># --- LDA : fonction discriminante déjà définie ---</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict_lda(x):</span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    score_0 <span class="op">=</span> lda_discriminant(x, mu_0, inv_pooled_cov, prior_0)</span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    score_1 <span class="op">=</span> lda_discriminant(x, mu_1, inv_pooled_cov, prior_1)</span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span> <span class="cf">if</span> score_0 <span class="op">&gt;</span> score_1 <span class="cf">else</span> <span class="dv">1</span></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="co"># --- QDA : prédiction manuelle ---</span></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict_qda(x):</span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>    score_0 <span class="op">=</span> qda_discriminant(x, mu_0, inv_cov_0, det_cov_0, prior_0)</span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>    score_1 <span class="op">=</span> qda_discriminant(x, mu_1, inv_cov_1, det_cov_1, prior_1)</span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span> <span class="cf">if</span> score_0 <span class="op">&gt;</span> score_1 <span class="cf">else</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Matrices de covariance individuelles</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    cov_0 <span class="op">=</span> np.cov(df_class0[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].T)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    cov_1 <span class="op">=</span> np.cov(df_class1[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].T)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    det_cov_0 <span class="op">=</span> np.linalg.det(cov_0)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    det_cov_1 <span class="op">=</span> np.linalg.det(cov_1)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    inv_cov_0 <span class="op">=</span> np.linalg.inv(cov_0)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    inv_cov_1 <span class="op">=</span> np.linalg.inv(cov_1)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Matrice de covariance commune (pooled)</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    pooled_cov <span class="op">=</span> ((n_0 <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> cov_0 <span class="op">+</span> (n_1 <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> cov_1) <span class="op">/</span> (n_0 <span class="op">+</span> n_1 <span class="op">-</span> <span class="dv">2</span>)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    inv_pooled_cov <span class="op">=</span> np.linalg.inv(pooled_cov)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    dict_values <span class="op">=</span>{</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>        <span class="st">"prior_0"</span>: prior_0,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>        <span class="st">"prior_1"</span>: prior_1,</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>        <span class="st">"mu_0"</span> :mu_0,</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>        <span class="st">"mu_1"</span> :mu_1,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">"var_0"</span> :var_0,</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>        <span class="st">"var_1"</span> :var_1,</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>        <span class="st">"inv_cov_0"</span>: inv_cov_0,</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        <span class="st">"inv_cov_1"</span>: inv_cov_1,</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>        <span class="st">"det_cov_0"</span> :det_cov_0,</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>        <span class="st">"det_cov_1"</span> :det_cov_1,</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>        <span class="st">"inv_pooled_cov"</span>: inv_pooled_cov</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dict_values</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Fonction de densité gaussienne</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gaussian_pdf(x, mean, var):</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="fl">1.0</span> <span class="op">/</span> np.sqrt(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> var)) <span class="op">*</span> np.exp(<span class="op">-</span> ((x <span class="op">-</span> mean) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> var))</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Fonction discriminante LDA</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lda_discriminant(x, mu, inv_cov, prior):</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">@</span> inv_cov <span class="op">@</span> mu <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> mu.T <span class="op">@</span> inv_cov <span class="op">@</span> mu <span class="op">+</span> np.log(prior)</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a><span class="co"># --- QDA : fonction discriminante ---</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> qda_discriminant(x, mu, inv_cov, det_cov, prior):</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> np.log(det_cov) <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> (x <span class="op">-</span> mu).T <span class="op">@</span> inv_cov <span class="op">@</span> (x <span class="op">-</span> mu) <span class="op">+</span> np.log(prior)</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Naive Bayes : prédiction manuelle ---</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict_naive_bayes(x, stats):</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>    probs_0 <span class="op">=</span> gaussian_pdf(x, stats[<span class="st">"mu_0"</span>].values, stats[<span class="st">"var_0"</span>].values)</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>    probs_1 <span class="op">=</span> gaussian_pdf(x, stats[<span class="st">"mu_1"</span>].values, stats[<span class="st">"var_1"</span>].values)</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>    likelihood_0 <span class="op">=</span> np.prod(probs_0) <span class="op">*</span> stats[<span class="st">"prior_0"</span>]</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>    likelihood_1 <span class="op">=</span> np.prod(probs_1) <span class="op">*</span> stats[<span class="st">"prior_1"</span>]</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span> <span class="cf">if</span> likelihood_0 <span class="op">&gt;</span> likelihood_1 <span class="cf">else</span> <span class="dv">1</span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict_lda(x, stats):</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>    score_0 <span class="op">=</span> lda_discriminant(x, stats[<span class="st">"mu_0"</span>].values, stats[<span class="st">"inv_pooled_cov"</span>], stats[<span class="st">"prior_0"</span>])</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>    score_1 <span class="op">=</span> lda_discriminant(x, stats[<span class="st">"mu_1"</span>].values, stats[<span class="st">"inv_pooled_cov"</span>], stats[<span class="st">"prior_1"</span>])</span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span> <span class="cf">if</span> score_0 <span class="op">&gt;</span> score_1 <span class="cf">else</span> <span class="dv">1</span></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> predict_qda(x, stats):</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>    score_0 <span class="op">=</span> qda_discriminant(x, stats[<span class="st">"mu_0"</span>], stats[<span class="st">"inv_cov_0"</span>], stats[<span class="st">"det_cov_0"</span>], stats[<span class="st">"prior_0"</span>])</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>    score_1 <span class="op">=</span> qda_discriminant(x, stats[<span class="st">"mu_1"</span>], stats[<span class="st">"inv_cov_1"</span>], stats[<span class="st">"det_cov_1"</span>], stats[<span class="st">"prior_1"</span>])</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span> <span class="cf">if</span> score_0 <span class="op">&gt;</span> score_1 <span class="cf">else</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="0c1f7937" class="cell" data-execution_count="3">
+<div id="bae1d70f" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>💻 Modelisation</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Récupération des observations</span></span>
@@ -388,52 +400,70 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Dictionnaire des fonctions de prédiction manuelle</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>all_models <span class="op">=</span> {<span class="st">"manual"</span> :{</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Naive Bayes (manual)"</span>: predict_naive_bayes,</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"LDA (manual)"</span>: predict_lda,</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"QDA (manual)"</span>: predict_qda},</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"non_manual"</span>:{</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>     <span class="st">"Naive Bayes"</span>: GaussianNB(),</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"LDA"</span>: LinearDiscriminantAnalysis(),</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"QDA"</span>: QuadraticDiscriminantAnalysis(),</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"KNN1"</span> : KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">1</span>),</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"KNN2"</span> : KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">2</span>),</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"KNN3"</span> : KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">3</span>),</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"KNN4"</span> : KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">4</span>),</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"KNN5"</span> : KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">5</span>),</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"GLM (Binomial)"</span>: <span class="st">"glm"</span>  <span class="co"># on met un identifiant spécial ici}</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>}}</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calcul_accuracy(df):</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Appliquer chaque prédicteur et stocker l'accuracy</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>   all_accuracies <span class="op">=</span> {}</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Application de chaque modèle</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>   <span class="cf">for</span> kind, models <span class="kw">in</span> all_models.items():</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>       <span class="cf">for</span> name, model <span class="kw">in</span> models.items():</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>           <span class="cf">if</span> kind <span class="op">==</span> <span class="st">"manual"</span>:</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>               preds <span class="op">=</span> np.array([model(x) <span class="cf">for</span> x <span class="kw">in</span> X_values])</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>           <span class="cf">elif</span> model <span class="op">==</span> <span class="st">"glm"</span>:</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>               <span class="co"># Ajout d'une constante pour GLM (intercept)</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>               X_glm <span class="op">=</span> sm.add_constant(X_values)</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>               glm <span class="op">=</span> sm.GLM(y, X_glm, family<span class="op">=</span>sm.families.Binomial())</span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>               glm_result <span class="op">=</span> glm.fit()</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>               probs <span class="op">=</span> glm_result.predict(X_glm)</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>               preds <span class="op">=</span> (probs <span class="op">&gt;=</span> <span class="fl">0.5</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>           <span class="cf">else</span>:  <span class="co"># sklearn</span></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>               model.fit(X_values, y)</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>               preds <span class="op">=</span> model.predict(X_values)</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>           acc <span class="op">=</span> classification_report(y, preds, output_dict<span class="op">=</span><span class="va">True</span>)[<span class="st">"accuracy"</span>]</span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>           all_accuracies[name] <span class="op">=</span> acc</span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>   <span class="cf">return</span> all_accuracies</span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Affichage</span></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">#for name, acc in all_accuracies.items():</span></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">#    print(f"{name}: {acc:.3f}")</span></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Créer un DataFrame pour affichage</span></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>accuracy_df <span class="op">=</span> pd.DataFrame.from_dict(calcul_accuracy(df), orient<span class="op">=</span><span class="st">"index"</span>, columns<span class="op">=</span>[<span class="st">"Accuracy"</span>])</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>accuracy_df.index.name <span class="op">=</span> <span class="st">"Model"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calcul_accuracy(df):</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    X_values <span class="op">=</span> df[[<span class="st">'X1'</span>, <span class="st">'X2'</span>]].values</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> df[<span class="st">"Y"</span>].values</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    stats <span class="op">=</span> get_stat(df)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Re-définir les fonctions manuelles en utilisant les stats locales</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    manual_models <span class="op">=</span> {</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Naive Bayes (manual)"</span>: <span class="kw">lambda</span> x: predict_naive_bayes(x, stats),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="st">"LDA (manual)"</span>: <span class="kw">lambda</span> x: predict_lda(x, stats),</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="st">"QDA (manual)"</span>: <span class="kw">lambda</span> x: predict_qda(x, stats)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Inclure aussi les modèles sklearn</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    non_manual_models <span class="op">=</span> {</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Naive Bayes"</span>: GaussianNB(),</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        <span class="st">"LDA"</span>: LinearDiscriminantAnalysis(),</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        <span class="st">"QDA"</span>: QuadraticDiscriminantAnalysis(),</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        <span class="st">"KNN1"</span>: KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        <span class="st">"KNN2"</span>: KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">2</span>),</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"KNN3"</span>: KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">3</span>),</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="st">"KNN4"</span>: KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">4</span>),</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">"KNN5"</span>: KNeighborsClassifier(n_neighbors<span class="op">=</span><span class="dv">5</span>),</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"GLM (Binomial)"</span>: <span class="st">"glm"</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    all_accuracies <span class="op">=</span> {}</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Prédictions manuelles</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, predict_func <span class="kw">in</span> manual_models.items():</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        preds <span class="op">=</span> np.array([predict_func(x) <span class="cf">for</span> x <span class="kw">in</span> X_values])</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        acc <span class="op">=</span> classification_report(y, preds, output_dict<span class="op">=</span><span class="va">True</span>)[<span class="st">"accuracy"</span>]</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        all_accuracies[name] <span class="op">=</span> acc</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Prédictions non manuelles</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name, model <span class="kw">in</span> non_manual_models.items():</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> model <span class="op">==</span> <span class="st">"glm"</span>:</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>            X_glm <span class="op">=</span> sm.add_constant(X_values)</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>            glm <span class="op">=</span> sm.GLM(y, X_glm, family<span class="op">=</span>sm.families.Binomial())</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>            glm_result <span class="op">=</span> glm.fit()</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>            probs <span class="op">=</span> glm_result.predict(X_glm)</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>            preds <span class="op">=</span> (probs <span class="op">&gt;=</span> <span class="fl">0.5</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>            model.fit(X_values, y)</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>            preds <span class="op">=</span> model.predict(X_values)</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>        acc <span class="op">=</span> classification_report(y, preds, output_dict<span class="op">=</span><span class="va">True</span>)[<span class="st">"accuracy"</span>]</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>        all_accuracies[name] <span class="op">=</span> acc</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> all_accuracies</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Affichage</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="co">#for name, acc in all_accuracies.items():</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="co">#    print(f"{name}: {acc:.3f}")</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Créer un DataFrame pour affichage</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>accuracy_raw <span class="op">=</span> calcul_accuracy(df)</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>accuracy_scale <span class="op">=</span> calcul_accuracy(df_scale)</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>accuracy_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>    <span class="st">"accuracy_raw"</span>: pd.Series(accuracy_raw),</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    <span class="st">"accuracy_scale"</span>: pd.Series(accuracy_scale)}).<span class="bu">round</span>(<span class="dv">3</span>)</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>accuracy_df.index.name <span class="op">=</span> <span class="st">"Model"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <details>
@@ -457,79 +487,90 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#print(accuracy_df)</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, Markdown</span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Arrondir les valeurs à 3 décimales</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>accuracy_df_rounded <span class="op">=</span> accuracy_df.copy()</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>accuracy_df_rounded[<span class="st">"Accuracy"</span>] <span class="op">=</span> accuracy_df_rounded[<span class="st">"Accuracy"</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="ss">f"</span><span class="sc">{</span>x<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Générer le Markdown avec contrôle CSS</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>md_table <span class="op">=</span> accuracy_df_rounded.to_markdown()</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># CSS pour contrôler la largeur des colonnes (via HTML table styling)</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>style <span class="op">=</span> <span class="st">"""</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;style&gt;</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;/style&gt;</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Affichage avec Markdown + style HTML</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>display(Markdown(md_table))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Générer le Markdown avec contrôle CSS</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>md_table <span class="op">=</span> accuracy_df.to_markdown()</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co"># CSS pour contrôler la largeur des colonnes (via HTML table styling)</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>style <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;style&gt;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;/style&gt;</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Affichage avec Markdown + style HTML</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>display(Markdown(md_table))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="442b51eb" class="cell quarto-layout-panel" data-execution_count="4" data-layout-ncol="2">
+<div id="9aeef929" class="cell quarto-layout-panel" data-execution_count="4" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <table class="table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;">Model</th>
-<th style="text-align: right;">Accuracy</th>
+<th style="text-align: right;">accuracy_raw</th>
+<th style="text-align: right;">accuracy_scale</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Naive Bayes (manual)</td>
 <td style="text-align: right;">0.95</td>
+<td style="text-align: right;">0.95</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">LDA (manual)</td>
+<td style="text-align: right;">0.936</td>
 <td style="text-align: right;">0.936</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">QDA (manual)</td>
 <td style="text-align: right;">0.971</td>
+<td style="text-align: right;">0.971</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Naive Bayes</td>
+<td style="text-align: right;">0.95</td>
 <td style="text-align: right;">0.95</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">LDA</td>
 <td style="text-align: right;">0.936</td>
+<td style="text-align: right;">0.936</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">QDA</td>
+<td style="text-align: right;">0.971</td>
 <td style="text-align: right;">0.971</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">KNN1</td>
 <td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">KNN2</td>
+<td style="text-align: right;">0.971</td>
 <td style="text-align: right;">0.971</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">KNN3</td>
 <td style="text-align: right;">0.964</td>
+<td style="text-align: right;">0.964</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">KNN4</td>
+<td style="text-align: right;">0.957</td>
 <td style="text-align: right;">0.957</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">KNN5</td>
 <td style="text-align: right;">0.957</td>
+<td style="text-align: right;">0.957</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">GLM (Binomial)</td>
+<td style="text-align: right;">0.943</td>
 <td style="text-align: right;">0.943</td>
 </tr>
 </tbody>
@@ -541,9 +582,6 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 </div>
 </div>
 </details>
-<section id="comparation-between-manual-and-sklearn-models-1" class="level6 sandrine">
-<h6 class="anchored" data-anchor-id="comparation-between-manual-and-sklearn-models-1"><strong>Comparation between “manual” and “sklearn” models</strong></h6>
-</section>
 
 
 </section>
