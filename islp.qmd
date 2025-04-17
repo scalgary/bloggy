@@ -312,3 +312,107 @@ display(Markdown(md_table))
 </details>
 
 
+Now Let us talk about Fisher discriminant Analysis
+```{python}
+# get data
+from sklearn.datasets import make_classification
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+import numpy as np
+X,y = make_classification(n_samples = 20, n_features=2,n_classes=2,n_informative=2,n_redundant=0, random_state=42)
+model = LinearDiscriminantAnalysis(store_covariance=True, solver='eigen')
+model.fit(X,y)
+X_single = X[0].reshape(1, -1)
+
+w0 = np.linalg.inv(model.covariance_) @ model.means_[0]
+w1 = np.linalg.inv(model.covariance_) @ model.means_[1]
+
+b0 = -0.5 * model.means_[0].T @ w0 + np.log(model.priors_[0])
+b1 = -0.5 * model.means_[1].T @ w1 + np.log(model.priors_[1])
+
+z0 = X_single @ w0 + b0
+z1 = X_single @ w1 + b1
+
+#
+p1 = np.exp(z1) / (np.exp(z1) + np.exp(z0))
+p0 = 1 - p1
+
+
+print("Manual predict_proba :", [p0, p1])
+print("sklearn predict_proba:", model.predict_proba(X_single))
+print("LDA coef_ :", model.coef_)
+# 2. Séparer les classes
+X0 = X[y == 0]
+X1 = X[y == 1]
+
+# 3. Moyennes
+mu0 = X0.mean(axis=0)
+mu1 = X1.mean(axis=0)
+
+# 4. Scatter matrices
+S0 = (X0 - mu0).T @ (X0 - mu0)
+S1 = (X1 - mu1).T @ (X1 - mu1)
+S_W = S0 + S1
+
+# 5. Calcul du vecteur de Fisher
+w_fisher = np.linalg.inv(S_W) @ (mu1 - mu0)
+w_fisher = w_fisher / np.linalg.norm(w_fisher)  # direction normalisée
+
+print("✅ Vecteur de Fisher :", w_fisher)
+print("✅ Fisher and coeff are proportionnal", np.isclose(w_fisher[0] / model.coef_[0][0], w_fisher[1] / model.coef_[0][1], 1e-6))
+
+
+
+
+
+```
+
+
+```{python}
+
+# Générer des données 2D avec 3 classes
+X, y = make_classification(
+    n_samples=150,
+    n_features=2,
+    n_redundant=0,
+    n_informative=2,
+    n_clusters_per_class=1,
+    n_classes=3,
+    random_state=42)
+model = LinearDiscriminantAnalysis(store_covariance=True, solver='eigen')
+model.fit(X,y)
+X_single = X[0].reshape(1, -1)
+# On stocke tous les delta_k
+deltas = []
+for k in range(3):  # ou len(model.classes_)
+    mu_k = model.means_[k]
+    w_k = np.linalg.inv(model.covariance_) @ mu_k
+    b_k = -0.5 * mu_k.T @ w_k + np.log(model.priors_[k])
+    delta_k = (X_single @ w_k + b_k).item()
+    deltas.append(delta_k)
+
+# Softmax
+exp_deltas = np.exp(deltas)
+probas = exp_deltas / np.sum(exp_deltas)
+
+print("Manual probas :", probas)
+print("sklearn       :", model.predict_proba(X_single)[0])
+
+```
+
+
+```{r}
+data(iris)
+library(MASS)
+iris.d <- iris[,1:4]  # the data    
+iris.c <- iris[,5]    # the classes 
+sc_obj <- stepclass(iris.d, iris.c, "lda", start.vars = "Sepal.Width")
+sc_obj
+plot(sc_obj)
+
+## or using formulas:
+sc_obj <- stepclass(Species ~ ., data = iris, method = "qda", 
+    start.vars = "Sepal.Width", criterion = "AS")  # same as above 
+sc_obj
+## now you can say stuff like
+## qda(sc_obj$formula, data = B3)
+```
