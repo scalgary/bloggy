@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Learn Every Day - Welcome To My Blog</title>
+<title>Learn Every Day - My SQL cheatsheet</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,40 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -153,23 +119,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#how-to-add-a-new-post" id="toc-how-to-add-a-new-post" class="nav-link active" data-scroll-target="#how-to-add-a-new-post">How to add a new post</a></li>
-  <li><a href="#how-to-update-css" id="toc-how-to-update-css" class="nav-link" data-scroll-target="#how-to-update-css">How to update css</a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Welcome To My Blog</h1>
+<h1 class="title">My SQL cheatsheet</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">manual</div>
+    <div class="quarto-category">SQL</div>
   </div>
   </div>
 
@@ -187,28 +146,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Using the Welcome Post as my own manual for managing this blog. Welcome!</p>
-<p><img src="thumbnail.jpg" class="img-fluid"></p>
-<p>Since this post doesn’t specify an explicit <code>image</code>, the first image in the post will be used in the listing page of posts.</p>
-<section id="how-to-add-a-new-post" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-add-a-new-post">How to add a new post</h2>
-<p>It is very easy.</p>
+<p>There are tons of SQL cheat sheets available online, but creating your own is the only real way to consolidate your knowledge.</p>
+<p>As a data user, I’m more interested in how to use data rather than how to create it. That’s why I tend to skip the SQL commands related to data creation, like INSERT or CREATE.</p>
+<p>What I really enjoy working with are EAV-style SQL databases—Entity-Attribute-Value models. They offer a flexible structure that’s perfect for handling dynamic, schema-less data, especially in analytical and exploratory contexts.</p>
+<p>Here are a few pros and cons I’ve found working with EAV models:</p>
+<p>✅ Pros</p>
 <ul>
-<li>Create a sub-directory within posts and add an index.qmd file in this directory</li>
+<li>Schema flexibility: Add new attributes without altering the schema.</li>
+<li>Great for semi-structured data: Perfect for domains like healthcare, product catalogs, or sensor data.</li>
+<li>Efficient storage: Avoids wide tables with tons of NULL values.</li>
+<li>Easy to extend: You can evolve the data model on the fly.</li>
+<li>User-defined fields support: Excellent for tools where end-users customize their data fields.</li>
 </ul>
-<p>That qmd file is the new blog post and when you render that, the blog home page will automatically update to include the newest post at the top of the listing.</p>
-<p>Then just do <code>quarto preview</code>.</p>
-</section>
-<section id="how-to-update-css" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-update-css">How to update css</h2>
-<p>The easiest way is to open the website in Chrome and look inspect the page. Then when you find exactly the class you want to update, you just update the scss file</p>
-<p>For example, I wanted the TOC title in blue: I have added</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>h2<span class="pp">#toc-title</span> {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span>$<span class="dv">blue</span><span class="op">;</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>❌ Cons</p>
+<ul>
+<li>Complex queries: Filtering and joining across attributes can get messy fast.</li>
+<li>Performance issues: Can be slower due to the high level of normalization.</li>
+<li>Data integrity limitations: Harder to enforce types and constraints.</li>
+<li>Difficult reporting: Pivoting and aggregating require more complex SQL.</li>
+<li>Indexing challenges: It’s tough to optimize queries through indexing since values live in one column.</li>
+</ul>
+<p>Code example</p>
+<div class="sandrine">
+<div class="goals">
+<div class="goals-header">
+<p>CTE</p>
+</div>
+<div class="goals-container">
+<p><strong>WITH</strong> sales_per_make <strong>AS (</strong> <br> SELECT car_make, <br> SUM(sales) AS total_sales_per_make <br> FROM cars c <br> JOIN car_sales cs <br> ON c.id = cs.cars_id <br> GROUP BY car_make <br> <strong>),</strong> <span style="color:green;font-weight: bolder;"># Note the comma</span> <br> sales_sum AS ( <br> SELECT SUM(sales) AS total_sales <br> FROM car_sales <br> <strong>)</strong> <span style="color:green;font-weight: bolder;"># Note NO comma</span> <br> SELECT car_make, <br> total_sales_per_make, <br> total_sales <br> FROM sales_per_make, sales_sum ss;</p>
+</div>
+</div>
+</div>
+<div class="goals">
+<div class="goals-header">
+<p>LEFT JOIN</p>
+</div>
+<div class="goals-container">
+<p>SELECT * <br> FROM A <span style="color:green;font-weight: bolder;">Keep all rows from A</span> <br> LEFT JOIN B <br> ON A.id = B.a_id;</p>
+</div>
+</div>
+<div class="goals">
+<div class="goals-header">
+<p>COALESCE</p>
+</div>
+<div class="goals-container">
+<p>Returns the first non-NULL value.</p>
+</div>
+</div>
+<div class="goals">
+<div class="goals-header">
+<p>STRING_AGG()</p>
+</div>
+<div class="goals-container">
+<p>Combines multiple values into a single cell, separated by a comma or another delimiter.</p>
+</div>
+</div>
+<div class="goals">
+<div class="goals-header">
+<p>CASE WHEN</p>
+</div>
+<div class="goals-container">
+<p>SELECT <br> s.respondent_id, <br> MAX(CASE WHEN s.question_code = ‘Q_AGE’ THEN r.response_label END) AS Q_AGE,<span style="color:green;font-weight: bolder;">MAX(CASE WHEN)</span> <br> MAX(CASE WHEN s.question_code = ‘Q_SEXE’ THEN r.response_label END) AS Q_SEXE <br>FROM survey s <br>JOIN responses r ON s.response_code = r.response_code <br>GROUP BY s.respondent_id;</p>
+</div>
+</div>
+<div class="goals">
+<div class="goals-header">
+<p>PROCEDURE</p>
+</div>
+<div class="goals-container">
+<p>BEGIN <br> <span style="color:green;font-weight: bolder;">– 1. Declare the string variables to hold parts of the final dynamic SQL</span> <br> DECLARE strSQLFlat STRING; <br> DECLARE strSQLTall STRING; <br> DECLARE strSQLTabulate STRING; <br> DECLARE strSQLFullCommand STRING; <br> DECLARE strSQLWhereClause STRING; <br><span style="color:green;font-weight: bolder;">– 2. Build the “Tall” part of the SQL (EAV-style, long format data)</span> <br> SET strSQLTall = CONCAT( <br> “WITH BPtall AS (”, <br> “SELECT … FROM …”,<span style="color:green;font-weight: bolder;">– first part: categorical data (joined from response mapping)</span> <br> “UNION ALL”, <br> “SELECT … FROM …”,<span style="color:green;font-weight: bolder;">– second part: other data types (numeric, date, text, etc.)</span> <br> “ORDER BY …)”, <br> ); <br><span style="color:green;font-weight: bolder;">– 3. Construction de strSQLFlat (transformation vers format “wide”)</span> <br> SET strSQLFlat = ( <br> WITH fieldList AS ( <br> SELECT * FROM UNNEST({columns}) AS strVarName <br> ) <br> SELECT STRING_AGG(…) FROM (…) <span style="color:green;font-weight: bolder;">– logic varies depending on metricType (categorical vs numeric)</span> <br> ); <br> <span style="color:green;font-weight: bolder;">– 4. Set the WHERE clause (can be custom or dynamic)</span> <br> SET strSQLWhereClause = “{whereclause}”; <br> <span style="color:green;font-weight: bolder;">– 5. Compose the final SELECT command using all previously built parts</span> <br> SET strSQLTabulate = CONCAT( <br> “SELECT * FROM bpFlat”, <br> strSQLWhereClause <br> ); <br> SET strSQLFullCommand = CONCAT( <br> strSQLTall, <br> strSQLFlat, <br> strSQLTabulate <br> ); <br> <span style="color:green;font-weight: bolder;">– 6. Run the dynamic SQL query</span> <br> EXECUTE IMMEDIATE strSQLFullCommand; <br>END;</p>
+</div>
+</div>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

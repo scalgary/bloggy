@@ -243,7 +243,7 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <section id="comparation-between-manual-and-sklearn-models" class="level6 sandrine">
 <h6 class="anchored" data-anchor-id="comparation-between-manual-and-sklearn-models"><strong>Comparation between “manual” and “sklearn” models</strong></h6>
 </section>
-<div id="1a2d0856" class="cell" data-execution_count="1">
+<div id="a8d778cc" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>💻 Data Simulation</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -294,7 +294,7 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>df_scale[<span class="st">"Y"</span>] <span class="op">=</span> y.astype(<span class="bu">int</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="403f6050" class="cell" data-execution_count="2">
+<div id="5260603d" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>💻 Manual Classifiers</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aperçu des données</span></span>
@@ -386,7 +386,7 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span> <span class="cf">if</span> score_0 <span class="op">&gt;</span> score_1 <span class="cf">else</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="8f813b99" class="cell" data-execution_count="3">
+<div id="d0ab15a6" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>💻 Modelisation</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Récupération des observations</span></span>
@@ -501,7 +501,7 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Affichage avec Markdown + style HTML</span></span>
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>display(Markdown(md_table))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="1df578cf" class="cell quarto-layout-panel" data-execution_count="4" data-layout-ncol="2">
+<div id="e3006a87" class="cell quarto-layout-panel" data-execution_count="4" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <table class="table table-sm table-striped small">
@@ -583,7 +583,7 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 </div>
 </details>
 <p>Now Let us talk about Fisher discriminant Analysis</p>
-<div id="50da102f" class="cell" data-execution_count="5">
+<div id="2a5838d0" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get data</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_classification</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.discriminant_analysis <span class="im">import</span> LinearDiscriminantAnalysis</span>
@@ -637,7 +637,7 @@ LDA coef_ : [[-0.56366339  1.76112763]]
 ✅ Fisher and coeff are proportionnal True</code></pre>
 </div>
 </div>
-<div id="1326423c" class="cell" data-execution_count="6">
+<div id="2f9c416c" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Générer des données 2D avec 3 classes</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_classification(</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">150</span>,</span>

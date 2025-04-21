@@ -1,0 +1,12 @@
+{
+  "hash": "61729e971d6177293f7d63b7a41d29b7",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"My SQL cheatsheet\"\nformat: html\ncategories: [SQL]\ntoc: true\n---\n\nThere are tons of SQL cheat sheets available online, but creating your own is the only real way to consolidate your knowledge.\n\nAs a data user, I’m more interested in how to use data rather than how to create it. That’s why I tend to skip the SQL commands related to data creation, like INSERT or CREATE.\n\nWhat I really enjoy working with are EAV-style SQL databases—Entity-Attribute-Value models. They offer a flexible structure that’s perfect for handling dynamic, schema-less data, especially in analytical and exploratory contexts.\n\nHere are a few pros and cons I’ve found working with EAV models:\n\n✅ Pros\n\n* Schema flexibility: Add new attributes without altering the schema.\n* Great for semi-structured data: Perfect for domains like healthcare, product catalogs, or sensor data.\n* Efficient storage: Avoids wide tables with tons of NULL values.\n* Easy to extend: You can evolve the data model on the fly.\n* User-defined fields support: Excellent for tools where end-users customize their data fields.\n\n❌ Cons\n\n* Complex queries: Filtering and joining across attributes can get messy fast.\n* Performance issues: Can be slower due to the high level of normalization.\n* Data integrity limitations: Harder to enforce types and constraints.\n* Difficult reporting: Pivoting and aggregating require more complex SQL.\n* Indexing challenges: It’s tough to optimize queries through indexing since values live in one column.\n\nCode example\n\n\n\n```{sql}\nWITH sales_per_make AS (\n    SELECT car_make,\n         SUM(sales) AS total_sales_per_make\n    FROM cars c\nJOIN car_sales cs\n        ON c.id = cs.cars_id\nGROUP BY car_make\n),\n \nsales_sum AS (\n    SELECT SUM(sales) AS total_sales\n    FROM car_sales\n)\n     \nSELECT car_make,\n     total_sales_per_make,\n     total_sales\nFROM sales_per_make, sales_sum ss;\n```\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

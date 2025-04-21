@@ -49,7 +49,7 @@ $min-contrast-ratio: 2.25 !default;
 // $body-color: body-mix(0%) !default;
 $body-bg: $secondary !default;
 $body-color: $primary !default;
-
+$code-block-bg: $secondary !default;
 $light: $body-color !default;
 $dark: $body-bg !default;
 
@@ -729,6 +729,7 @@ h2#toc-title {
 }
 .sandrine strong  {
   color:$blue;
+  
 }
 .sandrine a  {
   color:$pink;
@@ -761,4 +762,24 @@ h5{
   color: $white !important;
   background-color: $gray-400;
   font-weight: bold;
+}
+
+
+.goals-header {
+  background-color: #7badad;
+  padding-left: 12px;
+  padding-top: 20px;
+  font-weight: bold;
+  font-size: 1em;
+  display: flex;
+  align-items: center; /* ⬅️ centre verticalement */
+  height: 30px;   
+  color:white;      /* ⬅️ hauteur fixe */
+}
+.goals-container {
+  
+  padding-left: 10px;
+  color: black;
+  background-color: white;
+  border-bottom-right-radius: 10px;
 }

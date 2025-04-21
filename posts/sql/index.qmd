@@ -1,0 +1,157 @@
+---
+title: "My SQL cheatsheet"
+format: html
+categories: [SQL]
+toc: true
+---
+
+There are tons of SQL cheat sheets available online, but creating your own is the only real way to consolidate your knowledge.
+
+As a data user, I’m more interested in how to use data rather than how to create it. That’s why I tend to skip the SQL commands related to data creation, like INSERT or CREATE.
+
+What I really enjoy working with are EAV-style SQL databases—Entity-Attribute-Value models. They offer a flexible structure that’s perfect for handling dynamic, schema-less data, especially in analytical and exploratory contexts.
+
+Here are a few pros and cons I’ve found working with EAV models:
+
+✅ Pros
+
+* Schema flexibility: Add new attributes without altering the schema.
+* Great for semi-structured data: Perfect for domains like healthcare, product catalogs, or sensor data.
+* Efficient storage: Avoids wide tables with tons of NULL values.
+* Easy to extend: You can evolve the data model on the fly.
+* User-defined fields support: Excellent for tools where end-users customize their data fields.
+
+❌ Cons
+
+* Complex queries: Filtering and joining across attributes can get messy fast.
+* Performance issues: Can be slower due to the high level of normalization.
+* Data integrity limitations: Harder to enforce types and constraints.
+* Difficult reporting: Pivoting and aggregating require more complex SQL.
+* Indexing challenges: It’s tough to optimize queries through indexing since values live in one column.
+
+Code example
+
+::: {.sandrine}
+:::{.goals}
+::::{.goals-header}
+CTE
+::::
+::::{.goals-container}
+
+**WITH** sales_per_make **AS (**
+ <br>   SELECT car_make,
+ <br>       SUM(sales) AS total_sales_per_make
+ <br> FROM cars c
+ <br> JOIN car_sales cs
+ <br>     ON c.id = cs.cars_id
+<br> GROUP BY car_make
+<br> **),** [# Note the comma]{style="color:green;font-weight: bolder;"}
+<br> sales_sum AS (
+<br>     SELECT SUM(sales) AS total_sales
+<br>     FROM car_sales
+<br> **)**   [# Note NO comma]{style="color:green;font-weight: bolder;"}
+<br> SELECT car_make,
+<br>      total_sales_per_make,
+<br>      total_sales
+<br> FROM sales_per_make, sales_sum ss;
+::::
+:::
+:::
+
+
+
+
+:::{.goals}
+::::{.goals-header}
+LEFT JOIN
+::::
+::::{.goals-container}
+SELECT * 
+<br> FROM A [Keep all rows from A]{style="color:green;font-weight: bolder;"}
+<br> LEFT JOIN B 
+<br> ON A.id = B.a_id;
+::::
+:::
+
+
+
+:::{.goals}
+::::{.goals-header}
+COALESCE
+::::
+::::{.goals-container}
+Returns the first non-NULL value.
+::::
+:::
+
+
+:::{.goals}
+::::{.goals-header}
+STRING_AGG()
+::::
+::::{.goals-container}
+Combines multiple values into a single cell, separated by a comma or another delimiter.
+::::
+:::
+
+:::{.goals}
+::::{.goals-header}
+CASE WHEN
+::::
+::::{.goals-container}
+SELECT
+<br>  s.respondent_id,
+<br>  MAX(CASE WHEN s.question_code = 'Q_AGE' THEN r.response_label END) AS Q_AGE,[MAX(CASE WHEN)]{style="color:green;font-weight: bolder;"}
+<br>  MAX(CASE WHEN s.question_code = 'Q_SEXE' THEN r.response_label END) AS Q_SEXE
+<br>FROM survey s
+<br>JOIN responses r ON s.response_code = r.response_code
+<br>GROUP BY s.respondent_id;
+::::
+:::
+
+
+
+:::{.goals}
+::::{.goals-header}
+PROCEDURE
+::::
+::::{.goals-container}
+BEGIN
+<br>  [-- 1. Declare the string variables to hold parts of the final dynamic SQL]{style="color:green;font-weight: bolder;"}
+<br>  DECLARE strSQLFlat STRING;
+<br>  DECLARE strSQLTall STRING;
+<br>  DECLARE strSQLTabulate STRING;
+<br>  DECLARE strSQLFullCommand STRING;
+<br>  DECLARE strSQLWhereClause STRING;
+<br>[-- 2. Build the "Tall" part of the SQL (EAV-style, long format data)]{style="color:green;font-weight: bolder;"}
+<br>  SET strSQLTall = CONCAT(
+<br>    "WITH BPtall AS (",
+<br>    "SELECT ... FROM ...",[-- first part: categorical data (joined from response mapping)]{style="color:green;font-weight: bolder;"}
+<br>    "UNION ALL",
+<br>    "SELECT ... FROM ...",[ -- second part: other data types (numeric, date, text, etc.)]{style="color:green;font-weight: bolder;"}
+<br>    "ORDER BY ...)",
+<br>  );
+ <br>[-- 3. Construction de strSQLFlat (transformation vers format "wide")]{style="color:green;font-weight: bolder;"}
+<br>  SET strSQLFlat = (
+<br>    WITH fieldList AS (
+<br>      SELECT * FROM UNNEST({columns}) AS strVarName
+<br>    )
+<br>    SELECT STRING_AGG(...) FROM (...) [-- logic varies depending on metricType (categorical vs numeric)]{style="color:green;font-weight: bolder;"}
+<br>  );
+<br>  [-- 4. Set the WHERE clause (can be custom or dynamic)]{style="color:green;font-weight: bolder;"}
+<br>  SET strSQLWhereClause = "{whereclause}";
+<br>  [-- 5. Compose the final SELECT command using all previously built parts]{style="color:green;font-weight: bolder;"}
+<br>  SET strSQLTabulate = CONCAT(
+<br>    "SELECT * FROM bpFlat ",
+<br>    strSQLWhereClause
+<br>  );
+<br>  SET strSQLFullCommand = CONCAT(
+<br>    strSQLTall,
+<br>    strSQLFlat,
+<br>    strSQLTabulate
+<br>  );
+<br>  [-- 6. Run the dynamic SQL query]{style="color:green;font-weight: bolder;"}
+<br>  EXECUTE IMMEDIATE strSQLFullCommand;
+<br>END;
+::::
+:::
