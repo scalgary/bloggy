@@ -243,7 +243,7 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <section id="comparation-between-manual-and-sklearn-models" class="level6 sandrine">
 <h6 class="anchored" data-anchor-id="comparation-between-manual-and-sklearn-models"><strong>Comparation between “manual” and “sklearn” models</strong></h6>
 </section>
-<div id="5312dd58" class="cell" data-execution_count="1">
+<div id="1a2d0856" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>💻 Data Simulation</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -294,7 +294,7 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>df_scale[<span class="st">"Y"</span>] <span class="op">=</span> y.astype(<span class="bu">int</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="def3c078" class="cell" data-execution_count="2">
+<div id="403f6050" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>💻 Manual Classifiers</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aperçu des données</span></span>
@@ -386,7 +386,7 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span> <span class="cf">if</span> score_0 <span class="op">&gt;</span> score_1 <span class="cf">else</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="6f3fa68b" class="cell" data-execution_count="3">
+<div id="8f813b99" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>💻 Modelisation</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Récupération des observations</span></span>
@@ -501,7 +501,7 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Affichage avec Markdown + style HTML</span></span>
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>display(Markdown(md_table))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div id="caf47c2d" class="cell quarto-layout-panel" data-layout-ncol="2" data-execution_count="4">
+<div id="1df578cf" class="cell quarto-layout-panel" data-execution_count="4" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <table class="table table-sm table-striped small">
@@ -582,6 +582,108 @@ Pr(Y = k \mid X = x) = \frac{\pi_k f_k(x) }{\sum_{l=1}^{K} \pi_l*f_l(x)}
 </div>
 </div>
 </details>
+<p>Now Let us talk about Fisher discriminant Analysis</p>
+<div id="50da102f" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get data</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_classification</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.discriminant_analysis <span class="im">import</span> LinearDiscriminantAnalysis</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>X,y <span class="op">=</span> make_classification(n_samples <span class="op">=</span> <span class="dv">20</span>, n_features<span class="op">=</span><span class="dv">2</span>,n_classes<span class="op">=</span><span class="dv">2</span>,n_informative<span class="op">=</span><span class="dv">2</span>,n_redundant<span class="op">=</span><span class="dv">0</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LinearDiscriminantAnalysis(store_covariance<span class="op">=</span><span class="va">True</span>, solver<span class="op">=</span><span class="st">'eigen'</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>model.fit(X,y)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>X_single <span class="op">=</span> X[<span class="dv">0</span>].reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> np.linalg.inv(model.covariance_) <span class="op">@</span> model.means_[<span class="dv">0</span>]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>w1 <span class="op">=</span> np.linalg.inv(model.covariance_) <span class="op">@</span> model.means_[<span class="dv">1</span>]</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>b0 <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> model.means_[<span class="dv">0</span>].T <span class="op">@</span> w0 <span class="op">+</span> np.log(model.priors_[<span class="dv">0</span>])</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>b1 <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> model.means_[<span class="dv">1</span>].T <span class="op">@</span> w1 <span class="op">+</span> np.log(model.priors_[<span class="dv">1</span>])</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>z0 <span class="op">=</span> X_single <span class="op">@</span> w0 <span class="op">+</span> b0</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>z1 <span class="op">=</span> X_single <span class="op">@</span> w1 <span class="op">+</span> b1</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>p1 <span class="op">=</span> np.exp(z1) <span class="op">/</span> (np.exp(z1) <span class="op">+</span> np.exp(z0))</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>p0 <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> p1</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Manual predict_proba :"</span>, [p0, p1])</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"sklearn predict_proba:"</span>, model.predict_proba(X_single))</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"LDA coef_ :"</span>, model.coef_)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Séparer les classes</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>X0 <span class="op">=</span> X[y <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>X1 <span class="op">=</span> X[y <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Moyennes</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>mu0 <span class="op">=</span> X0.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>mu1 <span class="op">=</span> X1.mean(axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Scatter matrices</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>S0 <span class="op">=</span> (X0 <span class="op">-</span> mu0).T <span class="op">@</span> (X0 <span class="op">-</span> mu0)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>S1 <span class="op">=</span> (X1 <span class="op">-</span> mu1).T <span class="op">@</span> (X1 <span class="op">-</span> mu1)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>S_W <span class="op">=</span> S0 <span class="op">+</span> S1</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Calcul du vecteur de Fisher</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>w_fisher <span class="op">=</span> np.linalg.inv(S_W) <span class="op">@</span> (mu1 <span class="op">-</span> mu0)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>w_fisher <span class="op">=</span> w_fisher <span class="op">/</span> np.linalg.norm(w_fisher)  <span class="co"># direction normalisée</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"✅ Vecteur de Fisher :"</span>, w_fisher)</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"✅ Fisher and coeff are proportionnal"</span>, np.isclose(w_fisher[<span class="dv">0</span>] <span class="op">/</span> model.coef_[<span class="dv">0</span>][<span class="dv">0</span>], w_fisher[<span class="dv">1</span>] <span class="op">/</span> model.coef_[<span class="dv">0</span>][<span class="dv">1</span>], <span class="fl">1e-6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Manual predict_proba : [array([0.93627334]), array([0.06372666])]
+sklearn predict_proba: [[0.93627334 0.06372666]]
+LDA coef_ : [[-0.56366339  1.76112763]]
+✅ Vecteur de Fisher : [-0.30482603  0.95240805]
+✅ Fisher and coeff are proportionnal True</code></pre>
+</div>
+</div>
+<div id="1326423c" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Générer des données 2D avec 3 classes</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> make_classification(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">150</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    n_features<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    n_redundant<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    n_informative<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    n_clusters_per_class<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    n_classes<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LinearDiscriminantAnalysis(store_covariance<span class="op">=</span><span class="va">True</span>, solver<span class="op">=</span><span class="st">'eigen'</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>model.fit(X,y)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>X_single <span class="op">=</span> X[<span class="dv">0</span>].reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># On stocke tous les delta_k</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>deltas <span class="op">=</span> []</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):  <span class="co"># ou len(model.classes_)</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    mu_k <span class="op">=</span> model.means_[k]</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    w_k <span class="op">=</span> np.linalg.inv(model.covariance_) <span class="op">@</span> mu_k</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    b_k <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> mu_k.T <span class="op">@</span> w_k <span class="op">+</span> np.log(model.priors_[k])</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    delta_k <span class="op">=</span> (X_single <span class="op">@</span> w_k <span class="op">+</span> b_k).item()</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    deltas.append(delta_k)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Softmax</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>exp_deltas <span class="op">=</span> np.exp(deltas)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>probas <span class="op">=</span> exp_deltas <span class="op">/</span> np.<span class="bu">sum</span>(exp_deltas)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Manual probas :"</span>, probas)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"sklearn       :"</span>, model.predict_proba(X_single)[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Manual probas : [7.78108050e-01 2.21523750e-01 3.68200505e-04]
+sklearn       : [7.78108050e-01 2.21523750e-01 3.68200505e-04]</code></pre>
+</div>
+</div>
+<pre class="{r}"><code>data(iris)
+library(MASS)
+iris.d &lt;- iris[,1:4]  # the data    
+iris.c &lt;- iris[,5]    # the classes 
+sc_obj &lt;- stepclass(iris.d, iris.c, "lda", start.vars = "Sepal.Width")
+sc_obj
+plot(sc_obj)
+
+## or using formulas:
+sc_obj &lt;- stepclass(Species ~ ., data = iris, method = "qda", 
+    start.vars = "Sepal.Width", criterion = "AS")  # same as above 
+sc_obj
+## now you can say stuff like
+## qda(sc_obj$formula, data = B3)</code></pre>
 
 
 </section>
